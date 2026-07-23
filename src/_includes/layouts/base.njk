@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ description or site.tagline }}">
+    <title>{% if title %}{{ title }} | {% endif %}{{ site.name }}</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <a class="identity" href="/" aria-label="{{ site.name }} home">
+        <span class="identity-mark" aria-hidden="true">M</span>
+        <span>
+          <span class="identity-name">{{ site.name }}</span>
+          <span class="identity-tagline">{{ site.tagline }}</span>
+        </span>
+      </a>
+    </header>
+
+    <div class="site-shell">
+      <aside class="site-navigation" aria-label="Site navigation">
+        {% set navigationItems = collections.all | navigationTree %}
+        {% macro renderNavigation(items, currentKey) %}
+          <ul>
+            {% for item in items %}
+              <li>
+                <a href="{{ item.url }}"{% if item.key == currentKey %} aria-current="page"{% endif %}>{{ item.label }}</a>
+                {% if item.children.length %}{{ renderNavigation(item.children, currentKey) | safe }}{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endmacro %}
+        <details open>
+          <summary>Explore the collection</summary>
+          <nav>{{ renderNavigation(navigationItems, navigation.key) | safe }}</nav>
+        </details>
+      </aside>
+
+      <main id="main-content" class="main-content">
+        {{ content | safe }}
+      </main>
+    </div>
+
+    <footer class="site-footer">
+      <p>{{ site.address }}</p>
+      <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+      <p>&copy; {{ currentYear }} {{ site.name }}</p>
+    </footer>
+  </body>
+</html>
