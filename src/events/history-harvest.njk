@@ -1,0 +1,83 @@
+---
+layout: layouts/page.njk
+title: History Harvest
+eyebrow: Recurring program
+id: history-harvest
+kind: event
+section: events
+order: 10
+tags: records
+event:
+  recurringSeries: History Harvest
+legacyUrl: http://www.mandanhistory.org/eventsactivities/historyharvest.html
+sourceFile: old-site/History Harvest.html
+card:
+  title: History Harvest
+  meta: Oral histories, photographs, and community artifacts
+  image: /assets/images/history-harvest/history-harvest-logo.jpg
+  imageAlt: History Harvest logo
+---
+<div class="article-split">
+  <div>
+    <p>During the first Sunday of August, the Mandan Historical Society hosts “History Harvest.” Volunteers gather oral histories, photograph artifacts and scan photographs offered by the public members to be preserved in our archives for future research, used on its website and/or incorporated into future displays.</p>
+
+    <p>Free refreshments are served.</p>
+  </div>
+  <figure>
+    <img src="/assets/images/history-harvest/history-harvest-logo.jpg" alt="History Harvest logo">
+  </figure>
+</div>
+
+<p>Please help the Mandan Historical Society preserve our stories for future generations. Contribute your stories, photos, or artifacts, stay connected and reach out! Contact our Collections Director if you have photos, audio recordings, or other files that will help document our experiences.</p>
+
+<section class="year-section" aria-labelledby="history-harvest-2022">
+  <h2 id="history-harvest-2022">2022 History Harvest</h2>
+  <div class="mascot-story">
+    <figure>
+      <img src="/assets/images/history-harvest/mandiana-joan.jpg" alt="Mandiana Joan">
+      <figcaption>Mandiana Joan</figcaption>
+    </figure>
+    <div>
+      <p>This year's event featured the introduction of our children's mascots. Mandiana Joan and Joe are twin siblings who love exploring history,. They will featured in subsequent events and promotional materials for the Society.</p>
+
+      <p>Also new this year, a free, hands-on butter churning demonstration was held funded by a grant from the Mandan Visitor Fund. Kids 3 to 93 were given a chance to churn their own butter.</p>
+    </div>
+    <figure>
+      <img src="/assets/images/history-harvest/mandiana-joe.jpg" alt="Mandiana Joe">
+      <figcaption>Mandiana Joe</figcaption>
+    </figure>
+  </div>
+
+  <div class="gallery-grid" aria-label="2022 History Harvest photographs">
+    {% for image in ["2022-01.jpg", "2022-02.jpg", "2022-03.jpg", "2022-04.jpg", "2022-05.jpg", "2022-06.jpg"] %}
+      <figure>
+        <a href="/assets/images/history-harvest/{{ image }}"><img src="/assets/images/history-harvest/{{ image }}" alt="2022 History Harvest photograph"></a>
+        {% if image == "2022-04.jpg" %}<figcaption>"Hands-On" Butter Churning Demonstration</figcaption>{% endif %}
+      </figure>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="year-section" aria-labelledby="history-harvest-2021">
+  <h2 id="history-harvest-2021">2021 History Harvest</h2>
+  <p>A dramatic telling of the story of Custer, life at Ft. Abraham Lincoln in the post Civil War years, and the Battle of the Little Bighorn was staged outdoors each summer 1959-1968 at the Custer Memorial Amphitheater at Ft. Abraham Lincoln State Park.</p>
+
+  <p>Six photographic prints taken by Bob Feickert were donated by Merry Wetsch. They are posted at this website for EDUCATIONAL PURPOSES only. <u>They must not be copied or downloaded without permission from the Feickert family.</u></p>
+
+  <p>For additional details, click here <a href="http://www.mandanhistory.org/areahistory/custerdramatrailwest.html">https://Trail West/Custer Drama</a></p>
+
+  <div class="gallery-grid gallery-restricted" aria-label="2021 History Harvest Bob Feickert photographs" data-rights="Educational purposes only; permission required from the Feickert family">
+    {% for image in ["feickert-cowboy-killed-by-arrow.jpg", "feickert-custer-overwatch-prisoner.jpg", "feickert-expedition-leaving.jpg", "feickert-chiefs-conference.jpg", "feickert-vertical-indians-united.jpg", "feickert-indian-warriors-prep.jpg"] %}
+      <figure><img src="/assets/images/history-harvest/{{ image }}" alt="Bob Feickert photograph donated by Merry Wetsch"></figure>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="year-section" aria-labelledby="history-harvest-2020">
+  <h2 id="history-harvest-2020">2020 History Harvest</h2>
+  <div class="gallery-grid gallery-grid-two" aria-label="2020 History Harvest photographs">
+    {% for image in ["2020-01.jpg", "2020-02.jpg", "2020-03.jpg", "2020-04.jpg"] %}
+      <figure><a href="/assets/images/history-harvest/{{ image }}"><img src="/assets/images/history-harvest/{{ image }}" alt="2020 History Harvest photograph"></a></figure>
+    {% endfor %}
+  </div>
+</section>

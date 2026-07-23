@@ -1,0 +1,13 @@
+---
+layout: layouts/page.njk
+title: Landmarks
+eyebrow: Places
+summary: Buildings, monuments, institutions, and other places in Mandan's history.
+navigation:
+  key: landmarks
+  label: Landmarks
+  parent: places
+  order: 20
+---
+{% set records = collections.records | recordsForSection("landmarks") %}
+{% include "components/record-list.njk" %}

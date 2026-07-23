@@ -6,14 +6,8 @@ summary: Explore Mandan homes recognized for their architecture and the stories 
 navigation:
   key: heritage-homes
   label: Heritage Homes
+  parent: places
   order: 10
 ---
-<div class="listing-grid">
-  <a class="listing-card" href="/heritage-homes/dunlap-harris-home/">
-    <img src="/assets/images/dunlap-harris-home-today.jpg" alt="The Dunlap-Harris Home, also called Tara">
-    <span>
-      <strong>Dunlap-Harris Home</strong>
-      <small>201 7th Avenue NW</small>
-    </span>
-  </a>
-</div>
+{% set records = collections.records | recordsForSection("heritage-homes") %}
+{% include "components/record-list.njk" %}

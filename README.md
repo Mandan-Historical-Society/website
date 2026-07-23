@@ -29,6 +29,8 @@ navigation:
 
 `eleventy.config.js` validates those relationships and builds the nested site menu. A missing parent or duplicate key fails the build instead of silently producing a broken menu.
 
+Only landing pages carry `navigation` metadata. Historical records use a stable `id`, `kind`, `section`, and the `records` tag. Section landing pages filter that collection to generate their listings, keeping the global menu useful as the archive grows.
+
 Place-specific fields such as `address` can remain alongside general fields such as `title`, `description`, and `summary`. Coordinates will be added once the map work begins. Legacy provenance is recorded with `legacyUrl` and `sourceFile` while content is being migrated.
 
 ## Legacy examples
@@ -44,3 +46,5 @@ The source was Windows-1252 HTML produced by an older site builder and contains 
 The Mantani PDF referenced by the old page was not included in the saved files. The new page records its legacy URL but intentionally does not publish a broken download button.
 
 The migrated article wording is intentionally preserved, including apparent spelling mistakes, grammatical errors, inconsistent punctuation, and potentially incorrect facts. The only content-level transformation is conversion from Windows-1252 to UTF-8; the surrounding presentation-table markup was replaced with semantic HTML. Corrections should be made in a later, separately reviewable commit.
+
+The working archive taxonomy, media fields, navigation approach, and future WACZ import plan are described in [`docs/content-model.md`](docs/content-model.md).

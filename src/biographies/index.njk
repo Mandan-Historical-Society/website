@@ -8,11 +8,5 @@ navigation:
   label: Biographies
   order: 20
 ---
-<div class="listing-grid">
-  <a class="listing-card listing-card-text" href="/biographies/margaret-bowers-bingenheimer/">
-    <span>
-      <strong>Margaret Bowers Bingenheimer</strong>
-      <small>1865–1942 · Teacher and civic volunteer</small>
-    </span>
-  </a>
-</div>
+{% set records = collections.records | recordsForSection("biographies") %}
+{% include "components/record-list.njk" %}

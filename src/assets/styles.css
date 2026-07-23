@@ -183,6 +183,8 @@ img { display: block; max-width: 100%; height: auto; }
   gap: 1rem;
 }
 
+.card-grid-compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
 .feature-card {
   min-height: 16rem;
   padding: 1.25rem;
@@ -211,6 +213,23 @@ img { display: block; max-width: 100%; height: auto; }
 .article-header { margin-bottom: clamp(2rem, 5vw, 4rem); }
 .article-header h1 { font-size: clamp(2.25rem, 6vw, 4.6rem); }
 .article-body > p { max-width: 42rem; }
+
+.article-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(13rem, 0.85fr);
+  gap: 1.5rem;
+  align-items: start;
+  margin: 1.75rem 0;
+}
+
+.article-split-small-image {
+  grid-template-columns: minmax(9rem, 0.3fr) minmax(0, 1fr);
+  align-items: center;
+}
+
+.article-split p:first-child { margin-top: 0; }
+
+.article-figure-wide { margin: 2rem 0; }
 
 .image-pair {
   display: grid;
@@ -276,6 +295,63 @@ figcaption {
   font-size: 0.82rem;
 }
 
+.year-section {
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.year-section h2 {
+  margin-top: 0;
+  color: var(--green);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 500;
+}
+
+.mascot-story {
+  display: grid;
+  grid-template-columns: minmax(6rem, 0.35fr) minmax(0, 1fr) minmax(6rem, 0.35fr);
+  gap: 1.25rem;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.gallery-grid-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.gallery-grid img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.gallery-restricted {
+  padding: 0.75rem;
+  border: 1px solid var(--rule);
+}
+
+.fund-balance {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.65fr);
+  gap: 1.5rem;
+  align-items: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  color: var(--green);
+  background: var(--green-light);
+}
+
+.fund-balance h2,
+.fund-balance p { margin: 0; }
+.fund-balance strong { display: block; font-size: clamp(1.3rem, 4vw, 2.2rem); }
+.memorial-name { text-align: center; }
+
 .site-footer {
   padding: 2.5rem max(1.25rem, calc((100vw - var(--content-width)) / 2));
   color: rgba(255, 255, 255, 0.78);
@@ -291,16 +367,20 @@ figcaption {
   .site-shell { grid-template-columns: 1fr; gap: 2.5rem; padding-top: 1.5rem; }
   .site-navigation { padding-bottom: 1.25rem; border-bottom: 1px solid var(--rule); }
   .site-navigation details:not([open]) { padding-bottom: 0; }
-  .card-grid { grid-template-columns: 1fr; }
+  .card-grid, .card-grid-compact { grid-template-columns: 1fr; }
   .feature-card { min-height: auto; }
   .feature-card h3 { margin-top: 1.5rem; }
-  .image-pair, .book-introduction { grid-template-columns: 1fr; }
+  .image-pair, .book-introduction, .article-split, .article-split-small-image, .fund-balance { grid-template-columns: 1fr; }
   .book-introduction figure { max-width: 14rem; }
+  .mascot-story { grid-template-columns: 1fr 1fr; }
+  .mascot-story > div { grid-column: 1 / -1; grid-row: 1; }
+  .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 450px) {
   .identity-tagline { display: none; }
   .article-figure-left { float: none; width: 100%; max-width: 16rem; margin: 0 0 1.5rem; }
+  .gallery-grid, .gallery-grid-two { grid-template-columns: 1fr; }
 }
 
 @media print {

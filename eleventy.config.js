@@ -46,10 +46,21 @@ function buildNavigationTree(collection) {
   return sortNodes(roots);
 }
 
+function recordsForSection(collection, section) {
+  return collection
+    .filter((page) => page.data.section === section)
+    .sort(
+      (left, right) =>
+        (left.data.order ?? 0) - (right.data.order ?? 0) ||
+        left.data.title.localeCompare(right.data.title),
+    );
+}
+
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
   eleventyConfig.addGlobalData("currentYear", () => new Date().getFullYear());
   eleventyConfig.addFilter("navigationTree", buildNavigationTree);
+  eleventyConfig.addFilter("recordsForSection", recordsForSection);
 
   return {
     dir: {

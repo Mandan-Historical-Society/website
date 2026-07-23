@@ -8,12 +8,5 @@ navigation:
   label: Historical Resources
   order: 30
 ---
-<div class="listing-grid">
-  <a class="listing-card" href="/resources/mantani/">
-    <img src="/assets/images/mantani-cover.jpg" alt="Cover of Mantani: A History of Mandan and Morton County, 1738–1964">
-    <span>
-      <strong><cite>Mantani</cite></strong>
-      <small>Sarah Tostevin · Published 1964</small>
-    </span>
-  </a>
-</div>
+{% set records = collections.records | recordsForSection("resources") %}
+{% include "components/record-list.njk" %}

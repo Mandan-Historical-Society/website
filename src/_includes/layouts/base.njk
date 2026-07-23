@@ -34,7 +34,7 @@
         {% endmacro %}
         <details open>
           <summary>Explore the collection</summary>
-          <nav>{{ renderNavigation(navigationItems, navigation.key) | safe }}</nav>
+          <nav>{{ renderNavigation(navigationItems, navigation.key or section) | safe }}</nav>
         </details>
       </aside>
 

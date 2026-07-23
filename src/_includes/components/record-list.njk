@@ -1,0 +1,15 @@
+<div class="listing-grid">
+  {% for record in records %}
+    <a class="listing-card{% if not record.data.card.image %} listing-card-text{% endif %}" href="{{ record.url }}">
+      {% if record.data.card.image %}
+        <img src="{{ record.data.card.image }}" alt="{{ record.data.card.imageAlt or '' }}">
+      {% endif %}
+      <span>
+        <strong>{{ record.data.card.title or record.data.title }}</strong>
+        {% if record.data.card.meta %}<small>{{ record.data.card.meta }}</small>{% endif %}
+      </span>
+    </a>
+  {% else %}
+    <p>No records have been added to this collection yet.</p>
+  {% endfor %}
+</div>

@@ -1,0 +1,12 @@
+---
+layout: layouts/page.njk
+title: Support the Society
+eyebrow: Participate
+summary: Membership, volunteering, and financial support sustain the Society's work.
+navigation:
+  key: support
+  label: Support the Society
+  order: 50
+---
+{% set records = collections.records | recordsForSection("support") %}
+{% include "components/record-list.njk" %}

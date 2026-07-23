@@ -1,0 +1,13 @@
+---
+layout: layouts/page.njk
+title: Gone Forever
+eyebrow: Places
+summary: Buildings and places that no longer stand, preserved through stories and photographs.
+navigation:
+  key: gone-forever
+  label: Gone Forever
+  parent: places
+  order: 30
+---
+{% set records = collections.records | recordsForSection("gone-forever") %}
+{% include "components/record-list.njk" %}

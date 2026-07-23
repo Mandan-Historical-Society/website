@@ -1,0 +1,12 @@
+---
+layout: layouts/page.njk
+title: Events and Programs
+eyebrow: Participate
+summary: Society programs and records of past public events and exhibits.
+navigation:
+  key: events
+  label: Events and Programs
+  order: 30
+---
+{% set records = collections.records | recordsForSection("events") %}
+{% include "components/record-list.njk" %}
