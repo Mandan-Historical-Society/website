@@ -339,6 +339,95 @@ figcaption {
 
 .map-status[hidden] { display: none; }
 
+.map-legend {
+  position: absolute;
+  z-index: 2;
+  bottom: 1.75rem;
+  left: 0.75rem;
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.4rem 0.55rem;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--rule);
+  border-radius: 0.2rem;
+  box-shadow: 0 0.1rem 0.5rem rgba(39, 43, 40, 0.12);
+  font-family: system-ui, sans-serif;
+  font-size: 0.66rem;
+  line-height: 1;
+}
+
+.map-legend span {
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.map-legend-swatch {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  background: currentColor;
+  border: 1px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px currentColor;
+}
+
+.map-category-heritage-homes { color: #a86e2d; }
+.map-category-landmarks { color: #254c3b; }
+.map-category-gone-forever { color: #8b3a32; }
+
+.map-marker {
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  background: currentColor;
+  border: 0.15rem solid white;
+  border-radius: 50% 50% 50% 0;
+  box-shadow: 0 0.08rem 0.35rem rgba(39, 43, 40, 0.5);
+  cursor: pointer;
+  transform: rotate(-45deg);
+}
+
+.map-marker::after {
+  position: absolute;
+  width: 0.35rem;
+  height: 0.35rem;
+  background: white;
+  border-radius: 50%;
+  content: "";
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+}
+
+.map-marker:focus-visible {
+  outline: 0.18rem solid var(--ink);
+  outline-offset: 0.12rem;
+}
+
+.map-popup {
+  display: block;
+  width: 10rem;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  text-decoration: none;
+}
+
+.map-popup:hover { color: var(--green); }
+
+.map-popup img {
+  width: 100%;
+  max-height: 7rem;
+  margin-bottom: 0.45rem;
+  object-fit: cover;
+}
+
+.map-popup strong {
+  display: block;
+  line-height: 1.25;
+}
+
+.maplibregl-popup-content { padding: 0.65rem; }
+
 .year-section {
   margin-top: 3.5rem;
   padding-top: 1.5rem;
@@ -425,6 +514,7 @@ figcaption {
   .identity-tagline { display: none; }
   .article-figure-left { float: none; width: 100%; max-width: 16rem; margin: 0 0 1.5rem; }
   .gallery-grid, .gallery-grid-two { grid-template-columns: 1fr; }
+  .map-legend { flex-direction: column; bottom: 1.25rem; }
 }
 
 @media print {
