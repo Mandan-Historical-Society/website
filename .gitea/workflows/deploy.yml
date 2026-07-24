@@ -26,6 +26,11 @@ jobs:
       - name: Build the Eleventy site
         run: npm run build
 
+      - name: Install deployment tools
+        run: |
+          apt-get update
+          apt-get install --yes --no-install-recommends openssh-client rsync
+
       - name: Configure deployment SSH key
         env:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
