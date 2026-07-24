@@ -6,6 +6,7 @@
     <meta name="description" content="{{ description or site.tagline }}">
     <title>{% if title %}{{ title }} | {% endif %}{{ site.name }}</title>
     <link rel="stylesheet" href="/assets/styles.css">
+    <link rel="stylesheet" href="/assets/feedback.css">
     {% if mapAssets %}
       <link rel="stylesheet" href="/assets/vendor/maplibre/maplibre-gl.css">
     {% endif %}
@@ -20,6 +21,13 @@
           <span class="identity-tagline">{{ site.tagline }}</span>
         </span>
       </a>
+      <div class="demo-feedback">
+        <span>Demo site feedback</span>
+        <a
+          data-feedback-link
+          href="mailto:aaron@axvigs.com?subject=Mandan%20Historical%20Society%20demo%20feedback&amp;body=Page%3A%20{{ page.url }}"
+        >aaron@axvigs.com</a>
+      </div>
     </header>
 
     <div class="site-shell">
@@ -56,5 +64,13 @@
       <script src="/assets/vendor/basemaps.js"></script>
       <script type="module" src="/assets/map.js"></script>
     {% endif %}
+    <script>
+      const feedbackLink = document.querySelector("[data-feedback-link]");
+      if (feedbackLink) {
+        const subject = "Mandan Historical Society demo feedback";
+        const body = `Page: ${window.location.href}\n\nFeedback:\n`;
+        feedbackLink.href = `mailto:aaron@axvigs.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      }
+    </script>
   </body>
 </html>
