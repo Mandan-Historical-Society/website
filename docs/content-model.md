@@ -213,11 +213,15 @@ Migration and editing are separate operations.
 4. Add accessibility text and structured metadata in clearly separate fields.
 5. Make factual or copy edits only in later, reviewable commits.
 
-The raw archive remains outside Git. The migrated content, selected original-quality assets, provenance metadata, and any extraction manifest belong in Git.
+The original WACZ capture is versioned in Git at
+`archive/source/mandanhistory-org.wacz` as an immutable historical artifact.
+Migrated content, selected original-quality assets, provenance metadata, and
+extraction manifests also belong in Git. Generated extraction workspaces and
+other reproducible intermediate files should remain outside Git.
 
-## Future WACZ import
+## WACZ import
 
-Browsertrix normally exports a `.wacz` file: a ZIP package containing WARC captures, an index, page metadata, and package metadata. When the archive is available, an importer can:
+Browsertrix exports a `.wacz` file: a ZIP package containing WARC captures, an index, page metadata, and package metadata. The preserved archive at `archive/source/mandanhistory-org.wacz` can be used by an importer to:
 
 1. Inventory captured page URLs from `pages/pages.jsonl`.
 2. Extract the selected HTML response for each canonical URL.
