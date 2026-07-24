@@ -1,0 +1,20 @@
+---
+layout: layouts/page.njk
+title: Area History
+eyebrow: Explore
+summary: Mandan's history from the arrival of the railroad through the present day.
+navigation:
+  key: area-history
+  label: Area History
+  order: 25
+---
+<div class="card-grid card-grid-compact">
+  <a class="feature-card" href="/resources/mantani/">
+    <span class="feature-card-number">Book</span>
+    <h3>Mantani</h3>
+    <p>Sarah Tostevin's history of Mandan and Morton County, 1738–1964.</p>
+  </a>
+</div>
+
+{% set records = collections.records | recordsForSection("area-history") %}
+{% include "components/record-list.njk" %}
