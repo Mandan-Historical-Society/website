@@ -61,13 +61,25 @@ Place-specific fields such as `address` can remain alongside general fields such
 
 ## Legacy examples
 
-The untouched saved pages remain in `old-site/`. Three examples have been migrated into clean UTF-8, semantic HTML:
+The authoritative Browsertrix capture is preserved unchanged at
+`archive/source/mandanhistory-org.wacz`. The section extractor can reproduce a
+focused working set without committing generated intermediates:
+
+```bash
+python3 scripts/extract-wacz-section.py \
+  archive/source/mandanhistory-org.wacz \
+  archive/work/heritage-homes \
+  --section heritagehomes/
+```
+
+The Heritage Homes detail pages and three earlier examples have been migrated
+into clean UTF-8, semantic HTML:
 
 - `src/heritage-homes/dunlap-harris-home.njk`
 - `src/biographies/margaret-bowers-bingenheimer.njk`
 - `src/resources/mantani.njk`
 
-The source was Windows-1252 HTML produced by an older site builder and contains presentation tables, inline styles, obsolete analytics, duplicated navigation, and some malformed JavaScript. Those wrappers should not be copied into new content.
+The source is Windows-1252 HTML produced by an older site builder and contains presentation tables, inline styles, obsolete analytics, duplicated navigation, and some malformed JavaScript. Those wrappers should not be copied into new content.
 
 The Mantani PDF referenced by the old page was not included in the saved files. The new page records its legacy URL but intentionally does not publish a broken download button.
 
