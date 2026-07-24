@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Create faithful first-pass Eleventy landmark records from extracted WACZ data."""
+"""Create faithful first-pass Eleventy place records from extracted WACZ data."""
 
 from __future__ import annotations
 
+import argparse
 import html
 import json
 import re
@@ -12,14 +13,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 
-ROOT = Path(__file__).resolve().parents[1]
-WORK = ROOT / "archive/work/landmarks"
-SOURCE = WORK / "arealandmarks"
-IMAGE_SOURCE = WORK / "images"
-PAGE_DESTINATION = ROOT / "src/places/landmarks"
-IMAGE_DESTINATION = ROOT / "src/assets/images/landmarks"
-
-SLUGS = {
+LANDMARK_SLUGS = {
     "2ndlibertymemrlbridge": "liberty-memorial-bridge",
     "carybldgmandandrug": "l-n-cary-building",
     "christthekingchurch": "christ-the-king-church",
@@ -45,6 +39,68 @@ SLUGS = {
     "youthcorrectionalcenter": "youth-correctional-center",
 }
 
+GONE_FOREVER_SLUGS = {
+    "ccccampchimney": "ccc-camp-chimney",
+    "centralschool": "central-school",
+    "collinsavecourthouse": "collins-street-county-courthouse",
+    "cumminsbuilding": "cummins-building",
+    "deaconesshospital": "deaconess-hospital",
+    "eielsonfield": "eielson-field",
+    "emersoninstoperahouse": "emerson-institute-opera-house",
+    "firststfederalbuilding": "first-street-federal-building",
+    "havanaclub": "havana-club",
+    "hotelnigey": "hotel-nigey",
+    "interoceanhotel": "inter-ocean-hotel",
+    "mandancreameryproduce": "mandan-creamery-and-produce",
+    "mandanflourmill": "mandan-flour-mill",
+    "merchantshotel": "merchants-hotel",
+    "ndmemorialbridge": "north-dakota-memorial-bridge",
+    "npqueenannedepot": "northern-pacific-queen-anne-depot",
+    "originalpassengerdepot": "northern-pacific-first-passenger-depot",
+    "palacetheatre": "palace-theatre",
+    "peopleshotel": "peoples-hotel",
+    "redtrailstateroute3": "red-trail-state-route-3",
+    "rockhaven": "rockhaven-harbor",
+    "topictheatre": "topic-theatre",
+}
+
+CONFIGURATIONS = {
+    "landmarks": {
+        "work": "landmarks",
+        "source": "arealandmarks",
+        "url_section": "arealandmarks",
+        "slugs": LANDMARK_SLUGS,
+        "skip": {"collins-avenue-civic-building"},
+        "eyebrow": "Landmark",
+        "status": "standing",
+    },
+    "gone-forever": {
+        "work": "gone-forever",
+        "source": "goneforever",
+        "url_section": "goneforever",
+        "slugs": GONE_FOREVER_SLUGS,
+        "skip": {"central-school", "collins-street-county-courthouse"},
+        "eyebrow": "Gone Forever",
+        "status": "demolished",
+    },
+}
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "collection", nargs="?", default="landmarks", choices=CONFIGURATIONS
+)
+args = parser.parse_args()
+config = CONFIGURATIONS[args.collection]
+
+ROOT = Path(__file__).resolve().parents[1]
+WORK = ROOT / "archive/work" / config["work"]
+SOURCE = WORK / config["source"]
+IMAGE_SOURCE = WORK / "images"
+PAGE_DESTINATION = ROOT / "src/places" / args.collection
+IMAGE_DESTINATION = ROOT / "src/assets/images" / args.collection
+SLUGS = config["slugs"]
+
 
 def normalize_text(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip()
@@ -61,6 +117,16 @@ def yaml_string(value: str) -> str:
     return json.dumps(value, ensure_ascii=False)
 
 
+def summary_sentence(value: str, minimum_length: int = 100) -> str:
+    sentences = re.split(r"(?<=[.!?])\s+", value)
+    selected = []
+    for sentence in sentences:
+        selected.append(sentence)
+        if len(" ".join(selected)) >= minimum_length:
+            break
+    return " ".join(selected)
+
+
 manifest = {
     item["url"]: item
     for item in json.loads((WORK / "manifest.json").read_text(encoding="utf-8"))
@@ -69,10 +135,12 @@ manifest = {
 for order, source_path in enumerate(sorted(SOURCE.glob("*.html")), start=1):
     legacy_name = source_path.stem
     slug = SLUGS[legacy_name]
-    if slug == "collins-avenue-civic-building":
+    if slug in config["skip"]:
         continue
 
-    source_url = f"http://www.mandanhistory.org/arealandmarks/{legacy_name}.html"
+    source_url = (
+        f"http://www.mandanhistory.org/{config['url_section']}/{legacy_name}.html"
+    )
     capture = manifest[source_url]
     soup = BeautifulSoup(source_path.read_bytes().decode("cp1252"), "html.parser")
     blocks = soup.select("#content .building_block")
@@ -99,14 +167,14 @@ for order, source_path in enumerate(sorted(SOURCE.glob("*.html")), start=1):
             else:
                 used_names[name] = 1
             shutil.copyfile(source_image, destination_images / name)
-            public_path = f"/assets/images/landmarks/{slug}/{name}"
+            public_path = f"/assets/images/{args.collection}/{slug}/{name}"
             block_figures.append(public_path)
             all_figures.append(public_path)
         figures_by_block.append(block_figures)
 
     paragraphs = [normalize_text(block.get_text()) for block in content_blocks]
     description = next((text for text in paragraphs if len(text) >= 100), title)
-    first_sentence = re.split(r"(?<=[.!?])\s+", description, maxsplit=1)[0]
+    first_sentence = summary_sentence(description)
     address_match = re.search(
         r"\b\d{1,4}\s+(?:[A-Za-z0-9'-]+\s+){0,4}(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Blvd|Boulevard)\b[^,.;]*",
         title,
@@ -120,11 +188,11 @@ for order, source_path in enumerate(sorted(SOURCE.glob("*.html")), start=1):
         "---",
         "layout: layouts/page.njk",
         f"title: {yaml_string(title)}",
-        "eyebrow: Landmark",
+        f"eyebrow: {config['eyebrow']}",
         f"description: {yaml_string(first_sentence)}",
         f"id: {slug}",
         "kind: place",
-        "section: landmarks",
+        f"section: {args.collection}",
         f"order: {order * 10}",
         "tags: records",
     ]
@@ -133,8 +201,8 @@ for order, source_path in enumerate(sorted(SOURCE.glob("*.html")), start=1):
     front_matter.extend(
         [
             "place:",
-            "  status: standing",
-            "  collection: landmarks",
+            f"  status: {config['status']}",
+            f"  collection: {args.collection}",
             "  latitude:",
             "  longitude:",
             f"legacyUrl: {source_url}",
