@@ -238,6 +238,14 @@ img { display: block; max-width: 100%; height: auto; }
   margin: 0 0 2.5rem;
 }
 
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 1rem;
+  margin: 1.75rem 0;
+  align-items: start;
+}
+
 figure { margin: 0; }
 
 figure img {

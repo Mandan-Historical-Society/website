@@ -6,12 +6,34 @@ from __future__ import annotations
 import argparse
 import gzip
 import hashlib
+from html.parser import HTMLParser
 import json
 import shutil
 import tempfile
 import urllib.parse
 import zipfile
 from pathlib import Path, PurePosixPath
+
+
+class EmbeddedResourceParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.references: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs) -> None:
+        attributes = dict(attrs)
+        if tag in {"img", "script", "source"} and attributes.get("src"):
+            self.references.append(attributes["src"])
+        elif (
+            tag == "link"
+            and "stylesheet" in attributes.get("rel", "").lower()
+            and attributes.get("href")
+        ):
+            self.references.append(attributes["href"])
+        elif tag == "a" and attributes.get("href"):
+            path = urllib.parse.urlsplit(attributes["href"]).path.lower()
+            if path.endswith((".pdf", ".doc", ".docx", ".xls", ".xlsx", ".zip")):
+                self.references.append(attributes["href"])
 
 
 def parse_args() -> argparse.Namespace:
@@ -98,6 +120,7 @@ def main() -> None:
         section += "/"
 
     selected: dict[str, tuple[str, dict]] = {}
+    candidates_by_path: dict[str, tuple[str, dict]] = {}
     with tempfile.TemporaryDirectory(prefix="wacz-section-") as temporary:
         temporary_path = Path(temporary)
         with zipfile.ZipFile(args.archive) as outer:
@@ -110,17 +133,25 @@ def main() -> None:
                     shutil.copyfileobj(source, target)
                 with zipfile.ZipFile(nested_path) as inner:
                     for record in iter_cdx(inner):
-                        if (
-                            record.get("status") == "200"
-                            and record.get("mime") != "warc/revisit"
-                            and is_section_record(record, section)
-                        ):
+                        if record.get("status") != "200" or record.get("mime") == "warc/revisit":
+                            continue
+                        record_path = urllib.parse.urlsplit(record["url"]).path
+                        candidates_by_path.setdefault(
+                            record_path.lower(), (nested_path.name, record)
+                        )
+                        if is_section_record(record, section):
                             selected.setdefault(record["url"], (nested_path.name, record))
 
         warc_cache: dict[tuple[str, str], bytes] = {}
         manifest = []
         args.output.mkdir(parents=True, exist_ok=True)
-        for url, (nested_name, record) in sorted(selected.items()):
+        pending = list(sorted(selected.items()))
+        extracted_urls = set()
+        while pending:
+            url, (nested_name, record) = pending.pop(0)
+            if url in extracted_urls:
+                continue
+            extracted_urls.add(url)
             nested_path = temporary_path / nested_name
             cache_key = (nested_name, record["filename"])
             if cache_key not in warc_cache:
@@ -147,6 +178,15 @@ def main() -> None:
                     "referrer": record.get("referrer"),
                 }
             )
+            if record["mime"] == "text/html":
+                parser = EmbeddedResourceParser()
+                parser.feed(body.decode("cp1252", errors="replace"))
+                for reference in parser.references:
+                    resolved = urllib.parse.urljoin(url, reference)
+                    resolved_path = urllib.parse.urlsplit(resolved).path.lower()
+                    candidate = candidates_by_path.get(resolved_path)
+                    if candidate and candidate[1]["url"] not in extracted_urls:
+                        pending.append((candidate[1]["url"], candidate))
 
     manifest_path = args.output / "manifest.json"
     manifest_path.write_text(
