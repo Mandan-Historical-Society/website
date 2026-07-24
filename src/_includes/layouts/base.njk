@@ -6,6 +6,9 @@
     <meta name="description" content="{{ description or site.tagline }}">
     <title>{% if title %}{{ title }} | {% endif %}{{ site.name }}</title>
     <link rel="stylesheet" href="/assets/styles.css">
+    {% if mapAssets %}
+      <link rel="stylesheet" href="/assets/vendor/maplibre/maplibre-gl.css">
+    {% endif %}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -48,5 +51,10 @@
       <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
       <p>&copy; {{ currentYear }} {{ site.name }}</p>
     </footer>
+    {% if mapAssets %}
+      <script src="/assets/vendor/pmtiles.js"></script>
+      <script src="/assets/vendor/basemaps.js"></script>
+      <script type="module" src="/assets/map.js"></script>
+    {% endif %}
   </body>
 </html>

@@ -58,7 +58,21 @@ function recordsForSection(collection, section) {
 
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+  eleventyConfig.addPassthroughCopy({ "src/tiles": "tiles" });
+  eleventyConfig.addPassthroughCopy({
+    "node_modules/maplibre-gl/dist": "assets/vendor/maplibre",
+  });
+  eleventyConfig.addPassthroughCopy({
+    "node_modules/pmtiles/dist/pmtiles.js": "assets/vendor/pmtiles.js",
+  });
+  eleventyConfig.addPassthroughCopy({
+    "node_modules/@protomaps/basemaps/dist/basemaps.js": "assets/vendor/basemaps.js",
+  });
   eleventyConfig.addGlobalData("currentYear", () => new Date().getFullYear());
+  eleventyConfig.addGlobalData(
+    "pmtilesUrl",
+    () => process.env.PMTILES_URL || "/tiles/morton-burleigh.pmtiles",
+  );
   eleventyConfig.addFilter("navigationTree", buildNavigationTree);
   eleventyConfig.addFilter("recordsForSection", recordsForSection);
 

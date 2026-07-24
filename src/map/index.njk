@@ -1,0 +1,25 @@
+---
+layout: layouts/page.njk
+title: Historical Map
+description: Explore Mandan Historical Society places on an interactive map.
+mapAssets: true
+navigation:
+  key: map
+  label: Map
+  order: 35
+---
+
+<p class="lede">
+  Explore Mandan, Morton County, and Burleigh County. Historic-site markers
+  will appear as coordinates are added to the collection.
+</p>
+
+<div class="map-frame">
+  <p class="map-status" data-map-status role="status">Loading the map…</p>
+  <div
+    class="map"
+    data-map
+    data-pmtiles-url="{{ pmtilesUrl }}"
+    aria-label="Interactive map centered on Mandan, North Dakota"
+  ></div>
+</div>

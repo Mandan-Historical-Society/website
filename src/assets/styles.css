@@ -303,6 +303,42 @@ figcaption {
   font-size: 0.82rem;
 }
 
+.map-frame {
+  position: relative;
+  min-height: 32rem;
+  margin-top: 1.5rem;
+  overflow: hidden;
+  background: var(--paper-deep);
+  border: 1px solid var(--rule);
+}
+
+.map {
+  width: 100%;
+  height: min(68vh, 42rem);
+  min-height: 32rem;
+  font-family: system-ui, sans-serif;
+}
+
+.map-status {
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  left: 50%;
+  width: min(calc(100% - 2rem), 34rem);
+  margin: 0;
+  padding: 0.75rem 1rem;
+  color: #6b291e;
+  background: rgba(255, 248, 239, 0.96);
+  border: 1px solid #b96b58;
+  box-shadow: 0 0.15rem 0.75rem rgba(39, 43, 40, 0.15);
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  transform: translateX(-50%);
+}
+
+.map-status[hidden] { display: none; }
+
 .year-section {
   margin-top: 3.5rem;
   padding-top: 1.5rem;
@@ -392,7 +428,7 @@ figcaption {
 }
 
 @media print {
-  .site-header, .site-navigation, .site-footer, .skip-link { display: none; }
+  .site-header, .site-navigation, .site-footer, .skip-link, .map-frame { display: none; }
   .site-shell { display: block; max-width: none; padding: 0; }
   body { background: white; }
 }

@@ -15,6 +15,11 @@ Create the deployable `_site` directory with:
 npm run build
 ```
 
+The interactive map uses a committed Morton and Burleigh County PMTiles
+baseline. See
+[`docs/vector-tiles.md`](docs/vector-tiles.md) for archive creation and
+direct-update deployment instructions.
+
 ## Automatic deployment
 
 Gitea Actions builds and publishes the site after every push to `main`. The

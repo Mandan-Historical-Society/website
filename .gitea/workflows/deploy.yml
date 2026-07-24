@@ -50,8 +50,19 @@ jobs:
             --compress \
             --delete \
             --delay-updates \
+            --exclude '/tiles/' \
             --human-readable \
             --itemize-changes \
             --rsh "ssh -i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes" \
             _site/ \
             "mhsdemo-deploy@${DEPLOY_HOST}:/var/www/mhsdemo.axvig.com/public/"
+
+          rsync \
+            --archive \
+            --compress \
+            --ignore-existing \
+            --human-readable \
+            --itemize-changes \
+            --rsh "ssh -i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes" \
+            _site/tiles/ \
+            "mhsdemo-deploy@${DEPLOY_HOST}:/var/www/mhsdemo.axvig.com/public/tiles/"
