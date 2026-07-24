@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Migrate a small, reviewed biography sample from extracted WACZ records."""
+"""Migrate biography pages from extracted WACZ records."""
 
 from __future__ import annotations
 
@@ -25,6 +25,18 @@ SELECTED = {
     "georgebingenheimer": "george-h-bingenheimer",
     "richardbaron": "richard-baron",
     "elijahboley": "elijah-boley",
+    "philipblumenthal": "philip-blumenthal",
+    "frankbriggs": "frank-arlington-briggs",
+    "leobroderick": "leo-broderick",
+    "williambroderick": "william-broderick",
+    "frankbunting": "frank-edward-bunting",
+    "lymancary": "lyman-northrop-cary",
+    "jamesclark": "james-reed-clark",
+    "henrycoe": "henry-waldo-coe",
+    "violaboleycoe": "viola-mae-boley-coe",
+    "danielcollins": "daniel-collins",
+    "elizabethcuster": "elizabeth-bacon-custer",
+    "georgecuster": "george-armstrong-custer",
 }
 
 
