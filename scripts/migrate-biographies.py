@@ -13,13 +13,10 @@ from bs4 import BeautifulSoup
 
 
 ROOT = Path(__file__).resolve().parents[1]
-WORK = ROOT / "archive/work/biographies-ac"
-SOURCE = WORK / "biographiesac"
-IMAGE_SOURCE = WORK / "images"
 PAGE_DESTINATION = ROOT / "src/biographies"
 IMAGE_DESTINATION = ROOT / "src/assets/images/biographies"
 
-SELECTED = {
+AC_SELECTED = {
     "franklinanders": "franklin-lafayette-anders",
     "jdallen": "john-delbert-allen",
     "georgebingenheimer": "george-h-bingenheimer",
@@ -39,6 +36,13 @@ SELECTED = {
     "georgecuster": "george-armstrong-custer",
 }
 
+SECTIONS = (
+    ("biographiesac", ROOT / "archive/work/biographies-ac", AC_SELECTED),
+    ("biographiesdl", ROOT / "archive/work/biographies-dl", None),
+    ("biographiesmr", ROOT / "archive/work/biographies-mr", None),
+    ("biographiessz", ROOT / "archive/work/biographies-sz", None),
+)
+
 
 def normalize(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip()
@@ -54,6 +58,16 @@ def yaml_string(value: str) -> str:
     return json.dumps(value, ensure_ascii=False)
 
 
+def slugify_title(value: str) -> str:
+    without_dates = re.sub(
+        r"\s*[\[(]?(?:b\.\s*)?\d{4}\s*(?:-\s*\d{4})?\s*[\])]?\s*$",
+        "",
+        value,
+        flags=re.IGNORECASE,
+    )
+    return re.sub(r"[^a-z0-9]+", "-", without_dates.lower()).strip("-")
+
+
 def summary(value: str) -> str:
     selected = []
     for sentence in re.split(r"(?<=[.!?])\s+", value):
@@ -63,17 +77,47 @@ def summary(value: str) -> str:
     return " ".join(selected)
 
 
-manifest = {
-    item["url"]: item
-    for item in json.loads((WORK / "manifest.json").read_text(encoding="utf-8"))
-}
+records = []
+for section, work, selected in SECTIONS:
+    source = work / section
+    if selected:
+        pages = ((legacy_name, slug) for legacy_name, slug in selected.items())
+    else:
+        discovered = []
+        for source_path in sorted(source.glob("*.html")):
+            soup = BeautifulSoup(
+                source_path.read_bytes().decode("cp1252"), "html.parser"
+            )
+            title = normalize(soup.select("#content .building_block")[0].get_text())
+            discovered.append((source_path.stem, slugify_title(title)))
+        pages = discovered
 
-for order, (legacy_name, slug) in enumerate(SELECTED.items(), start=2):
-    source_url = (
-        f"http://www.mandanhistory.org/biographiesac/{legacy_name}.html"
+    manifest = {
+        item["url"]: item
+        for item in json.loads(
+            (work / "manifest.json").read_text(encoding="utf-8")
+        )
+    }
+    for legacy_name, slug in pages:
+        records.append(
+            (section, source, work / "images", manifest, legacy_name, slug)
+        )
+
+
+for order, (
+    section,
+    source,
+    image_source,
+    manifest,
+    legacy_name,
+    slug,
+) in enumerate(records, start=2):
+    relative_source = f"{section}/{legacy_name}.html"
+    capture = next(
+        item for item in manifest.values() if item["path"] == relative_source
     )
-    capture = manifest[source_url]
-    source_path = SOURCE / f"{legacy_name}.html"
+    source_url = capture["url"]
+    source_path = source / f"{legacy_name}.html"
     soup = BeautifulSoup(source_path.read_bytes().decode("cp1252"), "html.parser")
     blocks = soup.select("#content .building_block")
     title = normalize(blocks[0].get_text())
@@ -88,7 +132,7 @@ for order, (legacy_name, slug) in enumerate(SELECTED.items(), start=2):
     for block in content_blocks:
         figures = []
         for image in block.select('img[src*="../images/"]'):
-            source_image = IMAGE_SOURCE / Path(image["src"]).name
+            source_image = image_source / Path(image["src"]).name
             if not source_image.exists():
                 continue
             name = asset_name(source_image.name)
