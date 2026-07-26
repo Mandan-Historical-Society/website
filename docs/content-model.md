@@ -318,6 +318,30 @@ Legacy fixed-year comparisons remain unchanged in the Original version.
 Dynamic adjustments belong in the Copy-edited version so the editorial change
 is visible in Compare mode.
 
+## Timeline events
+
+Historical records may declare a curated list of significant events:
+
+```yaml
+timeline:
+  - date: "1881-02-24"
+    displayDate: February 24, 1881
+    label: Mandan was officially incorporated as a village.
+    category: government
+```
+
+`date` is an ISO-style sortable value and may contain a year, year and month, or
+complete date. `displayDate` preserves the appropriate human-readable
+precision. `label` should describe a meaningful community event in one concise
+sentence, and `category` supports future filtering.
+
+Eleventy combines these entries at build time to generate the master Timeline
+and links every event to its source article. Timeline entries are editorial
+metadata, not an automatic extraction of every year in the prose. Routine birth
+and death dates, incidental dates, and dates that provide context without
+describing an event should normally be excluded. Automated scanning may suggest
+candidates, but editors select the historically useful entries.
+
 ## Decisions still needed
 
 - Whether a visitor-facing label should be “Places,” “Landmarks,” or both at different levels.

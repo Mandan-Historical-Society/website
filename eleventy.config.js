@@ -129,6 +129,40 @@ function mentionIndex(collection) {
     );
 }
 
+function timelineGroups(collection) {
+  const events = collection
+    .flatMap((record) =>
+      (record.data.timeline ?? []).map((event) => {
+        if (!event.date || !event.label) {
+          throw new Error(
+            `Record "${record.data.id}" has a timeline event without a date or label`,
+          );
+        }
+        return { ...event, record };
+      }),
+    )
+    .sort(
+      (left, right) =>
+        left.date.localeCompare(right.date) ||
+        left.label.localeCompare(right.label),
+    );
+  const groups = new Map();
+
+  for (const event of events) {
+    const year = Number(event.date.slice(0, 4));
+    const decade = `${Math.floor(year / 10) * 10}s`;
+    if (!groups.has(decade)) {
+      groups.set(decade, []);
+    }
+    groups.get(decade).push(event);
+  }
+
+  return [...groups].map(([decade, groupedEvents]) => ({
+    decade,
+    events: groupedEvents,
+  }));
+}
+
 function inflation(amount, sourceYear) {
   const annual = cpiData.annual;
   const targetYear = Math.max(...Object.keys(annual).map(Number));
@@ -187,6 +221,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("mentionedRecords", mentionedRecords);
   eleventyConfig.addFilter("mentionsOf", mentionsOf);
   eleventyConfig.addFilter("mentionIndex", mentionIndex);
+  eleventyConfig.addFilter("timelineGroups", timelineGroups);
   eleventyConfig.addShortcode("inflation", inflation);
 
   return {
