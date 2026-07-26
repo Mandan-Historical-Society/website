@@ -64,6 +64,10 @@
       <script src="/assets/vendor/basemaps.js"></script>
       <script type="module" src="/assets/map.js"></script>
     {% endif %}
+    {% if articleVersions %}
+      <script src="/assets/vendor/diff.min.js"></script>
+      <script src="/assets/article-versions.js"></script>
+    {% endif %}
     <script>
       const feedbackLink = document.querySelector("[data-feedback-link]");
       if (feedbackLink) {

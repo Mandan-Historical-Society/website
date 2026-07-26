@@ -68,6 +68,9 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({
     "node_modules/@protomaps/basemaps/dist/basemaps.js": "assets/vendor/basemaps.js",
   });
+  eleventyConfig.addPassthroughCopy({
+    "node_modules/diff/dist/diff.min.js": "assets/vendor/diff.min.js",
+  });
   eleventyConfig.addGlobalData("currentYear", () => new Date().getFullYear());
   eleventyConfig.addGlobalData(
     "pmtilesUrl",

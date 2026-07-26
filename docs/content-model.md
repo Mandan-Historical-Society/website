@@ -233,6 +233,32 @@ Browsertrix exports a `.wacz` file: a ZIP package containing WARC captures, an i
 
 Extraction should be deterministic and rerunnable. Page-specific cleanup belongs after the faithful import rather than inside the importer.
 
+## Editorial versions
+
+The Alice Kennedy Dahners biography is the prototype for separately preserved
+original and copy-edited article text. Its page metadata and version controls
+live in `src/biographies/alice-kennedy-dahners/index.njk`; the two article
+fragments live under `src/_includes/articles/alice-kennedy-dahners/`.
+
+The original fragment preserves the migrated wording. The copy-edited fragment
+may correct grammar, spelling, punctuation, consistency, and clarity, but
+factual changes require a separate historical review. The page offers Original,
+Copy-edited, and Compare views. Compare uses jsdiff to calculate word-level
+changes in the browser and presents them side by side on wider screens or
+stacked on narrow screens.
+
+Versioned pages declare their editorial state in front matter:
+
+```yaml
+articleVersions: true
+editorial:
+  status: draft
+  defaultView: original
+```
+
+While an edit is a draft, the original text is the default. A reviewed article
+can change `status` and `defaultView` in a later, separately reviewable commit.
+
 ## Decisions still needed
 
 - Whether a visitor-facing label should be “Places,” “Landmarks,” or both at different levels.
