@@ -1,0 +1,53 @@
+---
+layout: layouts/page.njk
+title: People and Places Index
+eyebrow: Explore
+summary: Find people and places wherever they are mentioned across the historical collection.
+navigation:
+  key: people-places-index
+  label: People & Places Index
+  order: 37
+permalink: /index/
+---
+{% set entries = collections.records | mentionIndex %}
+
+<p class="notice">
+  This is a small working example. The index grows as editors confirm people
+  and place mentions in additional articles.
+</p>
+
+<div class="entity-index">
+  <section aria-labelledby="people-index-heading">
+    <h2 id="people-index-heading">People</h2>
+    {% for entry in entries %}
+      {% if entry.record.data.kind == "person" %}
+        <article class="entity-index-entry">
+          <h3><a href="{{ entry.record.url }}">{{ entry.record.data.title }}</a></h3>
+          <p>Mentioned in:</p>
+          <ul>
+            {% for source in entry.sources %}
+              <li><a href="{{ source.url }}">{{ source.data.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </article>
+      {% endif %}
+    {% endfor %}
+  </section>
+
+  <section aria-labelledby="places-index-heading">
+    <h2 id="places-index-heading">Places</h2>
+    {% for entry in entries %}
+      {% if entry.record.data.kind == "place" %}
+        <article class="entity-index-entry">
+          <h3><a href="{{ entry.record.url }}">{{ entry.record.data.title }}</a></h3>
+          <p>Mentioned in:</p>
+          <ul>
+            {% for source in entry.sources %}
+              <li><a href="{{ source.url }}">{{ source.data.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </article>
+      {% endif %}
+    {% endfor %}
+  </section>
+</div>

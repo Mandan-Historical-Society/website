@@ -1,0 +1,14 @@
+{
+  "series": {
+    "id": "CUUR0000SA0",
+    "name": "CPI-U, U.S. city average, all items, not seasonally adjusted",
+    "period": "annual average",
+    "source": "U.S. Bureau of Labor Statistics",
+    "sourceUrl": "https://www.bls.gov/cpi/data.htm",
+    "retrieved": "2026-07-25"
+  },
+  "annual": {
+    "1958": 28.9,
+    "2024": 313.689
+  }
+}

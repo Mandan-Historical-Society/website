@@ -10,4 +10,29 @@ layout: layouts/base.njk
   <div class="article-body">
     {{ content | safe }}
   </div>
+  {% if id and collections.records %}
+    {% set mentioned = mentions | mentionedRecords(collections.records) %}
+    {% set mentionedIn = collections.records | mentionsOf(id) %}
+    {% if mentioned.length or mentionedIn.length %}
+      <aside class="record-connections" aria-labelledby="record-connections-heading">
+        <h2 id="record-connections-heading">Connections</h2>
+        {% if mentioned.length %}
+          <h3>People and places in this article</h3>
+          <ul>
+            {% for record in mentioned %}
+              <li><a href="{{ record.url }}">{{ record.data.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% if mentionedIn.length %}
+          <h3>Mentioned in</h3>
+          <ul>
+            {% for record in mentionedIn %}
+              <li><a href="{{ record.url }}">{{ record.data.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </aside>
+    {% endif %}
+  {% endif %}
 </article>

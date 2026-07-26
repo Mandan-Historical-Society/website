@@ -55,6 +55,11 @@ related:
     - stuart-dunlap
   places: []
   records: []
+mentions:
+  people:
+    - lyman-cary
+  places:
+    - northern-pacific-railway
 legacy:
   url: http://www.mandanhistory.org/heritagehomes/dunlapharrishome.html
   sourceFile: old-site/Dunlap-Harris Home - Mandan Historical Society.html
@@ -63,7 +68,26 @@ migration:
   editorialReview: false
 ```
 
-`id` is a stable identifier and should not change when a title or URL changes. Relationships refer to IDs rather than titles or paths.
+`id` is a stable identifier and should not change when a title or URL changes.
+Relationships and mentions refer to IDs rather than titles or paths.
+
+### Mentions and the shared index
+
+`related` and `mentions` serve different purposes:
+
+- `related` identifies deliberately selected further reading.
+- `mentions` identifies people and places that actually appear in the article.
+
+Eleventy should invert the `mentions` metadata at build time to create a shared
+alphabetical people-and-places index. The same data should provide “Mentioned
+in” lists on person and place pages and “People mentioned” and “Places
+mentioned” lists on article pages.
+
+Mentions must use stable record IDs so alternate names, initials, married names,
+nicknames, and spelling variants all lead to the same entity. Automated text
+scanning may suggest mentions or identify likely omissions, but it should not be
+authoritative because many historical names are ambiguous. Editors should
+confirm the structured metadata.
 
 ## Record kinds found in the samples
 
@@ -258,6 +282,41 @@ editorial:
 
 While an edit is a draft, the original text is the default. A reviewed article
 can change `status` and `defaultView` in a later, separately reviewable commit.
+
+## Inflation-adjusted amounts
+
+Copy-edited articles may replace obsolete fixed-year inflation comparisons with
+a build-time inflation helper. Historical amounts must specify both the nominal
+amount and its source year rather than relying on the surrounding prose:
+
+```njk
+{% inflation 60000, 1958 %}
+```
+
+The helper should calculate purchasing-power equivalents using annual CPI-U,
+U.S. city average, all items, not seasonally adjusted. Normalized CPI values
+belong in a committed `src/_data/cpi.json` file along with source-series and
+provenance metadata.
+
+The file may contain only the historical source years currently used by the
+site plus the desired target year; it does not need to reproduce the entire CPI
+series.
+
+The adjustment target is always the greatest year actually present in
+`cpi.json`, regardless of the current calendar year. For example, if 2024 is
+the latest entry and the calculated equivalent is $500, the comparison should
+read:
+
+> about $500 in 2024 dollars
+
+Updating CPI data is an occasional manual editorial task. Builds must not fetch
+CPI data from the network, infer unavailable years, or require an automatic
+update script. The build should fail with a useful error if an article requests
+a source year absent from the data.
+
+Legacy fixed-year comparisons remain unchanged in the Original version.
+Dynamic adjustments belong in the Copy-edited version so the editorial change
+is visible in Compare mode.
 
 ## Decisions still needed
 
