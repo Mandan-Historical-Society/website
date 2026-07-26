@@ -318,6 +318,24 @@ img { display: block; max-width: 100%; height: auto; }
   background: rgba(255, 255, 255, 0.25);
 }
 
+.article-diff-caption p {
+  color: var(--muted);
+  background: var(--paper-deep);
+  font-family: system-ui, sans-serif;
+  font-size: 0.72rem;
+}
+
+.article-diff-caption p::before {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--gold);
+  content: attr(data-diff-label);
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .article-diff ins,
 .article-diff del {
   padding: 0.08em 0.03em;

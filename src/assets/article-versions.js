@@ -39,30 +39,40 @@
       return;
     }
 
-    const originalParagraphs = [
-      ...panels.get("original").querySelectorAll("p"),
+    const originalBlocks = [
+      ...panels.get("original").querySelectorAll("p, figcaption"),
     ];
-    const editedParagraphs = [
-      ...panels.get("copy-edited").querySelectorAll("p"),
+    const editedBlocks = [
+      ...panels.get("copy-edited").querySelectorAll("p, figcaption"),
     ];
-    const paragraphCount = Math.max(
-      originalParagraphs.length,
-      editedParagraphs.length,
+    const blockCount = Math.max(
+      originalBlocks.length,
+      editedBlocks.length,
     );
 
-    for (let index = 0; index < paragraphCount; index += 1) {
-      const originalText = originalParagraphs[index]?.textContent ?? "";
-      const editedText = editedParagraphs[index]?.textContent ?? "";
+    for (let index = 0; index < blockCount; index += 1) {
+      const originalBlock = originalBlocks[index];
+      const editedBlock = editedBlocks[index];
+      const originalText = originalBlock?.textContent ?? "";
+      const editedText = editedBlock?.textContent ?? "";
+      const isCaption =
+        originalBlock?.tagName === "FIGCAPTION" ||
+        editedBlock?.tagName === "FIGCAPTION";
       const changes = window.Diff.diffWords(originalText, editedText);
       const row = document.createElement("div");
       const original = document.createElement("p");
       const edited = document.createElement("p");
 
       row.className = "article-diff-row";
+      if (isCaption) {
+        row.classList.add("article-diff-caption");
+      }
       original.className = "article-diff-original";
       edited.className = "article-diff-edited";
-      original.dataset.diffLabel = "Original";
-      edited.dataset.diffLabel = "Copy-edited";
+      original.dataset.diffLabel = isCaption ? "Original caption" : "Original";
+      edited.dataset.diffLabel = isCaption
+        ? "Copy-edited caption"
+        : "Copy-edited";
 
       appendChanges(original, changes, "original");
       appendChanges(edited, changes, "copy-edited");
