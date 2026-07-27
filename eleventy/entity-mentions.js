@@ -222,7 +222,8 @@ export default function entityMentionsPlugin(
         (candidate) =>
           candidate.data.id === id && candidate.data.kind === "person",
       );
-      const url = record?.url ?? `/index/#index-person-${id}`;
+      const url =
+        record?.url ?? `/explore/people/#index-person-${id}`;
       const className = record
         ? "person-mention"
         : "person-mention person-mention-lightweight";

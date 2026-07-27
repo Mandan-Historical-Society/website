@@ -1,0 +1,36 @@
+---
+layout: layouts/page.njk
+title: Places Index
+eyebrow: Explore the Archive
+summary: Find places wherever they are mentioned across the historical collection.
+navigation:
+  key: places-index
+  label: Places Index
+  parent: explore
+  order: 40
+permalink: /explore/places/
+---
+{% set entries = collections.records | mentionIndex %}
+
+<p class="notice">
+  This index grows as editors confirm places mentioned in additional articles.
+</p>
+
+<div class="entity-index entity-index-single">
+  <section aria-labelledby="places-index-heading">
+    <h2 id="places-index-heading">Places</h2>
+    {% for entry in entries %}
+      {% if entry.kind == "place" %}
+        <article class="entity-index-entry" id="index-place-{{ entry.id }}">
+          <h3><a href="{{ entry.record.url }}">{{ entry.name }}</a></h3>
+          <p>Mentioned in:</p>
+          <ul>
+            {% for source in entry.sources %}
+              <li><a href="{{ source.url }}">{{ source.record.data.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </article>
+      {% endif %}
+    {% endfor %}
+  </section>
+</div>

@@ -479,6 +479,11 @@ figcaption {
   margin-top: 2rem;
 }
 
+.entity-index-single {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 50rem;
+}
+
 .entity-index-entry {
   scroll-margin-block: 20vh;
   padding: 1rem 0;

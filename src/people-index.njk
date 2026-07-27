@@ -1,0 +1,43 @@
+---
+layout: layouts/page.njk
+title: People Index
+eyebrow: Explore the Archive
+summary: Find people wherever they are mentioned across the historical collection.
+navigation:
+  key: people-index
+  label: People Index
+  parent: explore
+  order: 30
+permalink: /explore/people/
+---
+{% set entries = collections.records | mentionIndex %}
+
+<p class="notice">
+  This index grows as editors confirm people mentioned in additional articles.
+  A dotted link identifies a person who does not yet have a full biography.
+</p>
+
+<div class="entity-index entity-index-single">
+  <section aria-labelledby="people-index-heading">
+    <h2 id="people-index-heading">People</h2>
+    {% for entry in entries %}
+      {% if entry.kind == "person" %}
+        <article class="entity-index-entry" id="index-person-{{ entry.id }}">
+          <h3>
+            {% if entry.record %}
+              <a href="{{ entry.record.url }}">{{ entry.name }}</a>
+            {% else %}
+              <a href="{{ entry.sources[0].url }}">{{ entry.name }}</a>
+            {% endif %}
+          </h3>
+          <p>Mentioned in:</p>
+          <ul>
+            {% for source in entry.sources %}
+              <li><a href="{{ source.url }}">{{ source.record.data.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </article>
+      {% endif %}
+    {% endfor %}
+  </section>
+</div>
