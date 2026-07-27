@@ -91,3 +91,8 @@ The Mantani PDF referenced by the old page was not included in the saved files. 
 The migrated article wording is intentionally preserved, including apparent spelling mistakes, grammatical errors, inconsistent punctuation, and potentially incorrect facts. The only content-level transformation is conversion from Windows-1252 to UTF-8; the surrounding presentation-table markup was replaced with semantic HTML. Corrections should be made in a later, separately reviewable commit.
 
 The working archive taxonomy, media fields, navigation approach, and future WACZ import plan are described in [`docs/content-model.md`](docs/content-model.md).
+
+The editorial boundaries, versioned-article structure, semantic markup,
+indexing conventions, timeline selection, inflation handling, and validation
+checklist for article cleanup are documented in
+[`docs/copy-editing-guide.md`](docs/copy-editing-guide.md).
