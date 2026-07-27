@@ -480,8 +480,15 @@ figcaption {
 }
 
 .entity-index-entry {
+  scroll-margin-block: 20vh;
   padding: 1rem 0;
   border-top: 1px solid var(--rule);
+}
+
+.entity-index-entry:target {
+  padding-inline: 0.75rem;
+  background: var(--green-light);
+  border-left: 0.25rem solid var(--gold);
 }
 
 .entity-index-entry h3,
@@ -491,6 +498,24 @@ figcaption {
   color: var(--muted);
   font-family: system-ui, sans-serif;
   font-size: 0.7rem;
+}
+
+.person-mention {
+  scroll-margin-block: 35vh;
+}
+
+.person-mention-lightweight {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 0.16em;
+}
+
+.person-mention:target {
+  padding: 0.08em 0.18em;
+  background: var(--gold);
+  border-radius: 0.15em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 .timeline { margin-top: 2.5rem; }

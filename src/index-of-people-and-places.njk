@@ -20,13 +20,19 @@ permalink: /index/
   <section aria-labelledby="people-index-heading">
     <h2 id="people-index-heading">People</h2>
     {% for entry in entries %}
-      {% if entry.record.data.kind == "person" %}
-        <article class="entity-index-entry">
-          <h3><a href="{{ entry.record.url }}">{{ entry.record.data.title }}</a></h3>
+      {% if entry.kind == "person" %}
+        <article class="entity-index-entry" id="index-person-{{ entry.id }}">
+          <h3>
+            {% if entry.record %}
+              <a href="{{ entry.record.url }}">{{ entry.name }}</a>
+            {% else %}
+              <a href="{{ entry.sources[0].url }}">{{ entry.name }}</a>
+            {% endif %}
+          </h3>
           <p>Mentioned in:</p>
           <ul>
             {% for source in entry.sources %}
-              <li><a href="{{ source.url }}">{{ source.data.title }}</a></li>
+              <li><a href="{{ source.url }}">{{ source.record.data.title }}</a></li>
             {% endfor %}
           </ul>
         </article>
@@ -37,13 +43,13 @@ permalink: /index/
   <section aria-labelledby="places-index-heading">
     <h2 id="places-index-heading">Places</h2>
     {% for entry in entries %}
-      {% if entry.record.data.kind == "place" %}
+      {% if entry.kind == "place" %}
         <article class="entity-index-entry">
-          <h3><a href="{{ entry.record.url }}">{{ entry.record.data.title }}</a></h3>
+          <h3><a href="{{ entry.record.url }}">{{ entry.name }}</a></h3>
           <p>Mentioned in:</p>
           <ul>
             {% for source in entry.sources %}
-              <li><a href="{{ source.url }}">{{ source.data.title }}</a></li>
+              <li><a href="{{ source.url }}">{{ source.record.data.title }}</a></li>
             {% endfor %}
           </ul>
         </article>

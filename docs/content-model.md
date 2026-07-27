@@ -89,6 +89,30 @@ scanning may suggest mentions or identify likely omissions, but it should not be
 authoritative because many historical names are ambiguous. Editors should
 confirm the structured metadata.
 
+Articles with copy-edited content may also confirm a lightweight person directly
+in the prose with the `person` paired shortcode:
+
+```njk
+{% person "ernie-rober" %}Ernie Rober{% endperson %}
+```
+
+The stable ID is explicit so aliases and repeated references can resolve to the
+same person. When the visible wording is not the preferred index name, supply an
+optional canonical name:
+
+```njk
+{% person "blossom-lang-mcgillic", "Blossom Lang McGillic" %}
+  Mrs. Blossom [Lang] McGillic
+{% endperson %}
+```
+
+At build time, marked names without biography records are added to the people
+index and linked to the highlighted occurrence in the copy-edited article. In
+the article, a lightweight name links back to its index entry. Repeated
+occurrences receive unique anchors. If a biography is added later with the same
+`id`, marked names and the index link to that biography while retaining the
+article under “Mentioned in.”
+
 ## Record kinds found in the samples
 
 ### Person
