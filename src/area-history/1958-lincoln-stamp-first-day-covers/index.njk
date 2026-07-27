@@ -2,7 +2,7 @@
 layout: layouts/page.njk
 title: "1958 Lincoln 4¢ First Day Covers Issued at Mandan"
 eyebrow: Area History
-description: "The US Postal Service 4-cent Lincoln coil stamp and associated first day covers were issued at the Mandan post office on July 31, 1958."
+description: "The U.S. Post Office Department issued the four-cent Lincoln coil stamp and associated first-day covers at the Mandan post office on July 31, 1958."
 id: 1958-lincoln-stamp-first-day-covers
 kind: historical-topic
 section: area-history
@@ -12,41 +12,19 @@ legacyUrl: http://www.mandanhistory.org/areahistory/1958lincolnstampfdc.html
 sourceFile: archive/source/mandanhistory-org.wacz
 capturedAt: 2026-05-29T20:52:18Z
 articleVersions: true
+articleVersionKey: 1958-lincoln-stamp-first-day-covers
 editorial:
   status: draft
   defaultView: original
-  note: "This focused prototype changes only the obsolete inflation comparison; the remaining article has not yet been copy-edited."
+timeline:
+  - date: "1958-07-31"
+    displayDate: July 31, 1958
+    label: Lincoln four-cent coil stamp first-day covers were issued at the Mandan post office.
+    category: civic-event
 card:
   title: "1958 Lincoln 4¢ First Day Covers Issued at Mandan"
   meta: ""
   image: /assets/images/area-history/1958-lincoln-stamp-first-day-covers/350-1958-fdc-linclon-haworth-kms.jpg
   imageAlt: "Historic image from the 1958 Lincoln 4¢ First Day Covers Issued at Mandan page"
 ---
-<section class="article-versions" data-article-versions data-default-view="{{ editorial.defaultView }}">
-  <div class="article-version-toolbar">
-    <div class="article-version-controls" role="group" aria-label="Article version">
-      <button type="button" data-article-view="original" aria-pressed="false">Original</button>
-      <button type="button" data-article-view="copy-edited" aria-pressed="true">Copy-edited</button>
-      <button type="button" data-article-view="compare" aria-pressed="false">Compare</button>
-    </div>
-    <p class="article-version-note">{{ editorial.note }}</p>
-  </div>
-
-  <div data-article-panel="original" hidden>
-    <h2 class="visually-hidden">Original article</h2>
-    {% include "articles/1958-lincoln-stamp-first-day-covers/original.njk" %}
-  </div>
-
-  <div data-article-panel="copy-edited">
-    <h2 class="visually-hidden">Copy-edited article</h2>
-    {% include "articles/1958-lincoln-stamp-first-day-covers/copy-edited.njk" %}
-  </div>
-
-  <div data-article-panel="compare" hidden>
-    <div class="article-diff-heading" aria-hidden="true">
-      <span>Original</span>
-      <span>Copy-edited</span>
-    </div>
-    <div class="article-diff" data-article-diff aria-label="Comparison of original and copy-edited article text"></div>
-  </div>
-</section>
+{% include "components/article-versions.njk" %}
