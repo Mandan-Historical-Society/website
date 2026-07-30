@@ -207,28 +207,29 @@ Confirmed people in copy-edited prose use the `person` paired shortcode:
 {% person "ernie-rober" %}Ernie Rober{% endperson %}
 ```
 
-The first argument is a stable identity slug, not merely a slug generated for
-the current spelling. Before assigning one:
+The argument is a stable identity slug, not merely a slug generated for the
+current spelling. Before assigning one:
 
-1. Search existing biography records and reuse their `id` when appropriate.
+1. Search existing biography and mention-only entity records and reuse their
+   `id` when appropriate.
 2. Confirm that two similar names are actually the same person.
 3. Use one ID for initials, nicknames, married names, and other variants of the
    same person.
 
-When the visible wording is not the preferred index name, provide a canonical
-name:
+The wording inside the shortcode remains exactly what the article needs:
 
 ```njk
-{% person "blossom-lang-mcgillic", "Blossom Lang McGillic" %}
+{% person "blossom-lang-mcgillic" %}
   Mrs. Blossom [Lang] McGillic
 {% endperson %}
 ```
 
-The entity-mentions plugin creates a lightweight index entry when no biography
-exists. Lightweight links use a dotted underline and lead to the shared index.
-When a biography with the same ID exists, the name links directly to it with a
-normal solid underline. Index links lead back to the highlighted occurrence in
-the copy-edited article.
+The canonical name belongs only in the entity record's `title`. If no biography
+exists, create a mention-only record under `src/entities/people/`, using the
+same fields shown in the Places section below. Mention-only links use a dotted
+underline and lead to the People Index. When a published biography with the
+same ID exists, the name links directly to it with a normal solid underline.
+Index links lead back to the highlighted occurrence in the copy-edited article.
 
 Mark explicitly identified historical people, including credited authors when
 useful. Do not create entities for:
@@ -242,8 +243,58 @@ useful. Do not create entities for:
 Do not manually wrap `person` markup in another link. The shortcode generates
 the appropriate link itself.
 
-Places currently use record IDs in `mentions.places` front matter unless a
-dedicated inline place convention has been implemented.
+## Places and the shared index
+
+Confirmed places in copy-edited prose use the `place` paired shortcode:
+
+```njk
+{% place "northern-pacific-colonial-depot" %}
+  Colonial depot
+{% endplace %}
+```
+
+The argument is a stable place ID. Search existing landmark, Gone Forever, and
+mention-only entity records first and reuse the record's `id`. A place with a
+dedicated article receives a normal solid-underlined link to that article.
+
+Places without a dedicated article still require a mention-only record under
+`src/entities/places/`:
+
+```njk
+{% place "custer-memorial-amphitheater" %}
+  Custer Memorial Amphitheater
+{% endplace %}
+```
+
+The record supplies the canonical index name:
+
+```yaml
+title: Custer Memorial Amphitheater
+id: custer-memorial-amphitheater
+kind: place
+entityStatus: mention-only
+tags: records
+permalink: false
+```
+
+Mention-only entities use a dotted underline and link to the appropriate index.
+The index links back to the highlighted occurrence in the copy-edited article.
+The visible wording may be an abbreviation, title, alias, surname, possessive,
+or other contextually appropriate form; never repeat the canonical name as a
+second shortcode argument.
+
+As with people:
+
+1. Confirm the identity before assigning an ID.
+2. Reuse one ID for historical names, abbreviations, and other variants.
+3. Create a mention-only record if no published record exists.
+4. Put the canonical name only in that record's `title`.
+5. Mark the first useful occurrence rather than every repetition.
+6. Do not wrap a `place` shortcode inside another link.
+
+Existing `mentions.places` front matter remains supported for unversioned
+articles and other records. Do not add the same relationship both inline and
+in front matter merely to populate the index; the index merges either source.
 
 ## Dates and timeline entries
 
@@ -397,8 +448,12 @@ Before considering an article complete:
 - [ ] Caption text is not duplicated in body prose.
 - [ ] Dedicated site records are linked where useful.
 - [ ] Confirmed named people use stable person IDs.
+- [ ] Confirmed named places use stable place IDs.
+- [ ] Every person and place ID has one authoritative entity record.
+- [ ] Canonical names appear in records, not shortcode arguments.
 - [ ] Existing biography IDs were reused.
-- [ ] No person shortcode is nested inside a link.
+- [ ] Existing landmark and Gone Forever IDs were reused.
+- [ ] No person or place shortcode is nested inside a link.
 - [ ] Timeline entries are selective, dated conservatively, and quoted in YAML.
 - [ ] Inflation shortcodes use CPI years present in the data file.
 - [ ] Original, Copy-edited, and Compare views were inspected.

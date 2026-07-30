@@ -24,7 +24,7 @@ permalink: /explore/people/
       {% if entry.kind == "person" %}
         <article class="entity-index-entry" id="index-person-{{ entry.id }}">
           <h3>
-            {% if entry.record %}
+            {% if entry.record.data.entityStatus != "mention-only" and entry.record.url %}
               <a href="{{ entry.record.url }}">{{ entry.name }}</a>
             {% else %}
               <a href="{{ entry.sources[0].url }}">{{ entry.name }}</a>

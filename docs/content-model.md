@@ -78,8 +78,8 @@ Relationships and mentions refer to IDs rather than titles or paths.
 - `related` identifies deliberately selected further reading.
 - `mentions` identifies people and places that actually appear in the article.
 
-Eleventy should invert the `mentions` metadata at build time to create a shared
-alphabetical people-and-places index. The same data should provide “Mentioned
+Eleventy should invert the `mentions` metadata at build time to create separate
+alphabetical People and Places indexes. The same data should provide “Mentioned
 in” lists on person and place pages and “People mentioned” and “Places
 mentioned” lists on article pages.
 
@@ -89,29 +89,55 @@ scanning may suggest mentions or identify likely omissions, but it should not be
 authoritative because many historical names are ambiguous. Editors should
 confirm the structured metadata.
 
-Articles with copy-edited content may also confirm a lightweight person directly
-in the prose with the `person` paired shortcode:
+Articles with copy-edited content may confirm a person directly in the prose
+with the `person` paired shortcode:
 
 ```njk
 {% person "ernie-rober" %}Ernie Rober{% endperson %}
 ```
 
-The stable ID is explicit so aliases and repeated references can resolve to the
-same person. When the visible wording is not the preferred index name, supply an
-optional canonical name:
+Places use the parallel `place` paired shortcode:
 
 ```njk
-{% person "blossom-lang-mcgillic", "Blossom Lang McGillic" %}
+{% place "custer-memorial-amphitheater" %}
+  Custer Memorial Amphitheater
+{% endplace %}
+```
+
+The stable ID is explicit so aliases and repeated references can resolve to the
+same person or place. The text inside the shortcode is only the wording shown
+at that occurrence. It does not define the entity's canonical name:
+
+```njk
+{% person "blossom-lang-mcgillic" %}
   Mrs. Blossom [Lang] McGillic
 {% endperson %}
 ```
 
-At build time, marked names without biography records are added to the people
-index and linked to the highlighted occurrence in the copy-edited article. In
-the article, a lightweight name links back to its index entry. Repeated
-occurrences receive unique anchors. If a biography is added later with the same
-`id`, marked names and the index link to that biography while retaining the
-article under “Mentioned in.”
+Every marked entity must have one authoritative record. A full person or place
+article is its record when one exists. Entities without full articles use small
+records under `src/entities/people/` or `src/entities/places/`:
+
+```yaml
+title: Ernie Rober
+id: ernie-rober
+kind: person
+entityStatus: mention-only
+tags: records
+permalink: false
+```
+
+`title` is the canonical index name. `entityStatus: mention-only` prevents an
+empty standalone page from being generated. The entity still appears in the
+appropriate index, and its dotted-underlined prose mention links to that index
+entry. The index links back to the highlighted occurrence in the copy-edited
+article. Repeated occurrences receive unique anchors.
+
+To promote an entity, add substantive article content to its existing record,
+give it the normal page layout and section metadata, remove `permalink: false`,
+and change or remove `entityStatus`. Mentions then link to the published article
+with a normal solid underline. The stable `id` and all existing shortcodes stay
+unchanged.
 
 ## Record kinds found in the samples
 

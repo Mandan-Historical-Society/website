@@ -505,17 +505,20 @@ figcaption {
   font-size: 0.7rem;
 }
 
-.person-mention {
+.person-mention,
+.place-mention {
   scroll-margin-block: 35vh;
 }
 
-.person-mention-lightweight {
+.person-mention-lightweight,
+.place-mention-lightweight {
   text-decoration-line: underline;
   text-decoration-style: dotted;
   text-underline-offset: 0.16em;
 }
 
-.person-mention:target {
+.person-mention:target,
+.place-mention:target {
   padding: 0.08em 0.18em;
   background: var(--gold);
   border-radius: 0.15em;

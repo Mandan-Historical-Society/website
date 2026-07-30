@@ -3,8 +3,12 @@ import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const stableIdPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const personTagPattern =
-  /{%\s*person\s+"([^"]+)"(?:\s*,\s*"([^"]+)")?\s*%}([\s\S]*?){%\s*endperson\s*%}/g;
+const inlineTagPatterns = {
+  person:
+    /{%\s*person\s+"([^"]+)"\s*%}([\s\S]*?){%\s*endperson\s*%}/g,
+  place:
+    /{%\s*place\s+"([^"]+)"\s*%}([\s\S]*?){%\s*endplace\s*%}/g,
+};
 
 function* filesWithin(directory) {
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -17,8 +21,11 @@ function* filesWithin(directory) {
   }
 }
 
-function discoverPeople(articlesDirectory) {
-  const people = new Map();
+function discoverInlineEntities(articlesDirectory) {
+  const entities = {
+    person: new Map(),
+    place: new Map(),
+  };
   const directory =
     articlesDirectory instanceof URL
       ? fileURLToPath(articlesDirectory)
@@ -32,39 +39,27 @@ function discoverPeople(articlesDirectory) {
     const articleVersionKey = basename(dirname(inputPath));
     const source = readFileSync(inputPath, "utf8");
 
-    for (const match of source.matchAll(personTagPattern)) {
-      const [, id, canonicalName, visibleName] = match;
-      if (!stableIdPattern.test(id)) {
-        throw new Error(`Inline person ID "${id}" is not a stable slug`);
-      }
+    for (const [kind, pattern] of Object.entries(inlineTagPatterns)) {
+      for (const match of source.matchAll(pattern)) {
+        const [, id] = match;
+        if (!stableIdPattern.test(id)) {
+          throw new Error(`Inline ${kind} ID "${id}" is not a stable slug`);
+        }
 
-      const name = canonicalName ?? visibleName;
-      const existing = people.get(id);
-      if (
-        existing &&
-        canonicalName &&
-        existing.canonicalName &&
-        existing.canonicalName !== canonicalName
-      ) {
-        throw new Error(
-          `Inline person "${id}" has conflicting canonical names ` +
-            `"${existing.canonicalName}" and "${canonicalName}"`,
-        );
+        const existing = entities[kind].get(id);
+        entities[kind].set(id, {
+          id,
+          kind,
+          articleVersionKeys: new Set([
+            ...(existing?.articleVersionKeys ?? []),
+            articleVersionKey,
+          ]),
+        });
       }
-
-      people.set(id, {
-        id,
-        name: existing?.canonicalName ?? canonicalName ?? existing?.name ?? name,
-        canonicalName: existing?.canonicalName ?? canonicalName,
-        articleVersionKeys: new Set([
-          ...(existing?.articleVersionKeys ?? []),
-          articleVersionKey,
-        ]),
-      });
     }
   }
 
-  return people;
+  return entities;
 }
 
 function mentionIds(mentions = {}) {
@@ -72,11 +67,18 @@ function mentionIds(mentions = {}) {
 }
 
 function recordMap(collection) {
-  return new Map(
-    collection
-      .filter((record) => record.data.id)
-      .map((record) => [record.data.id, record]),
-  );
+  const records = new Map();
+  for (const record of collection.filter((candidate) => candidate.data.id)) {
+    const existing = records.get(record.data.id);
+    if (existing) {
+      throw new Error(
+        `Duplicate record ID "${record.data.id}" in ` +
+          `"${existing.inputPath}" and "${record.inputPath}"`,
+      );
+    }
+    records.set(record.data.id, record);
+  }
+  return records;
 }
 
 function mentionedRecords(mentions, collection) {
@@ -104,7 +106,7 @@ function mentionsOf(collection, targetId) {
     .sort((left, right) => left.data.title.localeCompare(right.data.title));
 }
 
-function mentionIndex(collection, inlinePeople) {
+function mentionIndex(collection, inlineEntities) {
   const recordsById = recordMap(collection);
   const references = new Map();
 
@@ -137,45 +139,65 @@ function mentionIndex(collection, inlinePeople) {
     };
   });
 
-  for (const person of inlinePeople.values()) {
-    const record = recordsById.get(person.id);
-    const sources = [...person.articleVersionKeys].map((articleVersionKey) => {
-      const source = collection.find(
-        (candidate) =>
-          candidate.data.articleVersionKey === articleVersionKey,
-      );
-      if (!source) {
+  for (const entities of Object.values(inlineEntities)) {
+    for (const entity of entities.values()) {
+      const record = recordsById.get(entity.id);
+      if (!record) {
         throw new Error(
-          `Inline person "${person.id}" belongs to unknown article "${articleVersionKey}"`,
+          `Inline ${entity.kind} "${entity.id}" has no entity record`,
         );
       }
-      return {
-        record: source,
-        url: `${source.url}?view=copy-edited#person-${person.id}`,
-      };
-    });
-    const existing = entries.find((entry) => entry.id === person.id);
-
-    if (existing) {
-      for (const source of sources) {
-        if (
-          !existing.sources.some(
-            (candidate) => candidate.record.data.id === source.record.data.id,
-          )
-        ) {
-          existing.sources.push(source);
-        }
+      if (record.data.kind !== entity.kind) {
+        throw new Error(
+          `Inline ${entity.kind} "${entity.id}" conflicts with ` +
+            `${record.data.kind} record of the same ID`,
+        );
       }
-      continue;
-    }
 
-    entries.push({
-      id: person.id,
-      kind: "person",
-      name: record?.data.title ?? person.name,
-      record,
-      sources,
-    });
+      const sources = [...entity.articleVersionKeys].map(
+        (articleVersionKey) => {
+          const source = collection.find(
+            (candidate) =>
+              candidate.data.articleVersionKey === articleVersionKey,
+          );
+          if (!source) {
+            throw new Error(
+              `Inline ${entity.kind} "${entity.id}" belongs to unknown ` +
+                `article "${articleVersionKey}"`,
+            );
+          }
+          return {
+            record: source,
+            url:
+              `${source.url}?view=copy-edited` +
+              `#${entity.kind}-${entity.id}`,
+          };
+        },
+      );
+      const existing = entries.find((entry) => entry.id === entity.id);
+
+      if (existing) {
+        for (const source of sources) {
+          if (
+            !existing.sources.some(
+              (candidate) =>
+                candidate.record.data.id === source.record.data.id,
+            )
+          ) {
+            existing.sources.push(source);
+          }
+        }
+        continue;
+      }
+
+      entries.push({
+        id: entity.id,
+        kind: entity.kind,
+        name: record.data.title,
+        record,
+        sources,
+      });
+    }
   }
 
   return entries.sort((left, right) => left.name.localeCompare(right.name));
@@ -185,14 +207,41 @@ function addOccurrenceAnchors(content) {
   const occurrences = new Map();
 
   return content.replace(
-    /<(a|span) class="([^"]*\bperson-mention\b[^"]*)" data-person="([^"]+)"([^>]*)>/g,
-    (tag, element, className, id, attributes) => {
-      const occurrence = (occurrences.get(id) ?? 0) + 1;
-      occurrences.set(id, occurrence);
+    /<(a|span) class="([^"]*\b(person|place)-mention\b[^"]*)" data-(person|place)="([^"]+)"([^>]*)>/g,
+    (tag, element, className, kind, dataKind, id, attributes) => {
+      if (kind !== dataKind) {
+        return tag;
+      }
+      const occurrenceKey = `${kind}:${id}`;
+      const occurrence = (occurrences.get(occurrenceKey) ?? 0) + 1;
+      occurrences.set(occurrenceKey, occurrence);
       const suffix = occurrence === 1 ? "" : `-${occurrence}`;
-      return `<${element} class="${className}" id="person-${id}${suffix}" data-person="${id}"${attributes}>`;
+      return `<${element} class="${className}" id="${kind}-${id}${suffix}" data-${kind}="${id}"${attributes}>`;
     },
   );
+}
+
+function inlineEntityShortcode(inlineEntities, kind, visibleName, id, context) {
+  if (!inlineEntities[kind].has(id)) {
+    throw new Error(`Inline ${kind} "${id}" was not discovered in source`);
+  }
+  const record = context?.collections?.records?.find(
+    (candidate) =>
+      candidate.data.id === id && candidate.data.kind === kind,
+  );
+  if (!record) {
+    throw new Error(`Inline ${kind} "${id}" has no entity record`);
+  }
+  const isPublished =
+    record.data.entityStatus !== "mention-only" && Boolean(record.url);
+  const indexName = kind === "person" ? "people" : "places";
+  const url = isPublished
+    ? record.url
+    : `/explore/${indexName}/#index-${kind}-${id}`;
+  const className = isPublished
+    ? `${kind}-mention`
+    : `${kind}-mention ${kind}-mention-lightweight`;
+  return `<a class="${className}" data-${kind}="${id}" href="${url}">${visibleName}</a>`;
 }
 
 export default function entityMentionsPlugin(
@@ -204,31 +253,37 @@ export default function entityMentionsPlugin(
     ),
   } = {},
 ) {
-  const inlinePeople = discoverPeople(articlesDirectory);
+  const inlineEntities = discoverInlineEntities(articlesDirectory);
 
   eleventyConfig.addFilter("mentionedRecords", mentionedRecords);
   eleventyConfig.addFilter("mentionsOf", mentionsOf);
   eleventyConfig.addFilter(
     "mentionIndex",
-    (collection) => mentionIndex(collection, inlinePeople),
+    (collection) => mentionIndex(collection, inlineEntities),
   );
   eleventyConfig.addPairedShortcode(
     "person",
     function (visibleName, id) {
-      if (!inlinePeople.has(id)) {
-        throw new Error(`Inline person "${id}" was not discovered in source`);
-      }
-      const record = this.ctx?.collections?.records?.find(
-        (candidate) =>
-          candidate.data.id === id && candidate.data.kind === "person",
+      return inlineEntityShortcode(
+        inlineEntities,
+        "person",
+        visibleName,
+        id,
+        this.ctx,
       );
-      const url =
-        record?.url ?? `/explore/people/#index-person-${id}`;
-      const className = record
-        ? "person-mention"
-        : "person-mention person-mention-lightweight";
-      return `<a class="${className}" data-person="${id}" href="${url}">${visibleName}</a>`;
     },
   );
-  eleventyConfig.addTransform("personMentionAnchors", addOccurrenceAnchors);
+  eleventyConfig.addPairedShortcode(
+    "place",
+    function (visibleName, id) {
+      return inlineEntityShortcode(
+        inlineEntities,
+        "place",
+        visibleName,
+        id,
+        this.ctx,
+      );
+    },
+  );
+  eleventyConfig.addTransform("entityMentionAnchors", addOccurrenceAnchors);
 }
