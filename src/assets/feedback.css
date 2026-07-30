@@ -29,11 +29,5 @@
 }
 
 @media (max-width: 450px) {
-  .demo-feedback {
-    font-size: 0.68rem;
-  }
-
-  .demo-feedback span {
-    display: none;
-  }
+  .demo-feedback { display: none; }
 }
