@@ -153,9 +153,14 @@ Use these values consistently:
   second check.
 - `cross-checked`: faded wording was compared with another preserved version
   of the same source text.
+- `reviewed`: a person has compared and corrected the complete transcription
+  against the photographed sign.
 
 `cross-checked` does not mean historically fact-checked. It means the displayed
 wording has been checked against another source copy.
+
+`reviewed` confirms the transcription, not every historical claim printed on
+the sign. Record the review date as `transcriptionReviewedAt`.
 
 ## Faithful transcription
 
