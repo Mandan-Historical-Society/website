@@ -96,3 +96,7 @@ The editorial boundaries, versioned-article structure, semantic markup,
 indexing conventions, timeline selection, inflation handling, and validation
 checklist for article cleanup are documented in
 [`docs/copy-editing-guide.md`](docs/copy-editing-guide.md).
+
+The intake, preservation, EXIF, transcription, discrepancy, and presentation
+workflow for neighborhood Heritage Home signs is documented in
+[`docs/heritage-sign-workflow.md`](docs/heritage-sign-workflow.md).
