@@ -529,10 +529,67 @@ figcaption {
   max-width: 50rem;
 }
 
+.index-letter-navigation {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  font-family: system-ui, sans-serif;
+  font-size: 0.78rem;
+}
+
+.index-letter-navigation span {
+  flex: none;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.index-letter-navigation ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.index-letter-navigation a {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  color: var(--green);
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid var(--rule);
+  border-radius: 0.2rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.index-letter-navigation a:hover {
+  color: white;
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.entity-index-letter {
+  scroll-margin-block: 2rem;
+  margin: 2rem 0 0;
+  padding-bottom: 0.35rem;
+  color: var(--green);
+  border-bottom: 0.2rem solid var(--gold);
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
 .entity-index-entry {
   scroll-margin-block: 20vh;
   padding: 1rem 0;
   border-top: 1px solid var(--rule);
+}
+
+.entity-index-letter + .entity-index-entry {
+  border-top: 0;
 }
 
 .entity-index-entry:target {
@@ -542,7 +599,12 @@ figcaption {
 }
 
 .entity-index-entry h3,
+.entity-index-entry h4,
 .entity-index-entry p { margin: 0; }
+
+.entity-index-entry h4 {
+  font-size: 1.08rem;
+}
 
 .entity-index-entry p {
   color: var(--muted);

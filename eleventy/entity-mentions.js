@@ -106,6 +106,22 @@ function mentionsOf(collection, targetId) {
     .sort((left, right) => left.data.title.localeCompare(right.data.title));
 }
 
+function personSortName(record) {
+  if (record.data.sortName) {
+    return record.data.sortName;
+  }
+
+  const nameWithoutDates = record.data.title
+    .replace(/\s*[\[(][^\])]*\d{4}[^\])]*[\])]\s*$/, "")
+    .replace(/\s+(?:b\.\s*)?\d{4}(?:\s*[-–]\s*\d{4})?\s*$/i, "");
+  const nameWithoutSuffix = nameWithoutDates.replace(
+    /(?:,\s*|\s+)(?:Jr\.?|Sr\.?|I{1,3}|IV)\s*$/i,
+    "",
+  );
+  const parts = nameWithoutSuffix.trim().split(/\s+/);
+  return parts.at(-1).replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "");
+}
+
 function mentionIndex(collection, inlineEntities) {
   const recordsById = recordMap(collection);
   const references = new Map();
@@ -130,6 +146,10 @@ function mentionIndex(collection, inlineEntities) {
       id,
       kind: record.data.kind,
       name: record.data.title,
+      sortName:
+        record.data.kind === "person"
+          ? personSortName(record)
+          : record.data.title,
       record,
       sources: sources
         .sort((left, right) =>
@@ -194,13 +214,26 @@ function mentionIndex(collection, inlineEntities) {
         id: entity.id,
         kind: entity.kind,
         name: record.data.title,
+        sortName:
+          entity.kind === "person"
+            ? personSortName(record)
+            : record.data.title,
         record,
         sources,
       });
     }
   }
 
-  return entries.sort((left, right) => left.name.localeCompare(right.name));
+  return entries
+    .map((entry) => ({
+      ...entry,
+      sortLetter: entry.sortName.charAt(0).toLocaleUpperCase(),
+    }))
+    .sort(
+      (left, right) =>
+        left.sortName.localeCompare(right.sortName) ||
+        left.name.localeCompare(right.name),
+    );
 }
 
 function addOccurrenceAnchors(content) {
