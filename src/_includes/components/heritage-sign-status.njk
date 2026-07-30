@@ -1,0 +1,9 @@
+{% for source in sources %}
+  {% if source.type == "interpretive-sign" and source.photographStatus == "awaiting-photograph" %}
+    <aside class="notice heritage-sign-status">
+      <strong>Plaque photograph forthcoming.</strong>
+      This home is known to have an interpretive yard plaque, but its photograph
+      and transcription have not yet been added to the collection.
+    </aside>
+  {% endif %}
+{% endfor %}
