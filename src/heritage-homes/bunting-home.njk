@@ -23,7 +23,8 @@ sources:
     photographedAt: 2026-07-31T18:35:12-05:00
     photoLatitude: 46.827038888889
     photoLongitude: -100.896263888889
-    transcriptionStatus: needs-review
+    transcription: transcriptions/bunting-home-sign.njk
+    transcriptionStatus: draft
 card:
   title: Bunting Home
   meta: 203 4th Avenue NW
@@ -64,8 +65,8 @@ card:
     </figcaption>
   </figure>
 
-  <p class="notice">
-    <strong>Transcription in progress.</strong>
-    The plaque text requires review before its complete wording is published.
-  </p>
+  <details class="source-transcription">
+    <summary>Read the draft sign transcription</summary>
+    <div>{% include "transcriptions/bunting-home-sign.njk" %}</div>
+  </details>
 </aside>
