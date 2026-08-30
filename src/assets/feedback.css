@@ -1,0 +1,33 @@
+.site-header {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.demo-feedback {
+  flex: 0 0 auto;
+  font-family: system-ui, sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  text-align: right;
+}
+
+.demo-feedback span {
+  display: block;
+  opacity: 0.75;
+}
+
+.demo-feedback a {
+  color: white;
+  font-weight: 700;
+  text-underline-offset: 0.18em;
+}
+
+.demo-feedback a:hover {
+  color: white;
+}
+
+@media (max-width: 450px) {
+  .demo-feedback { display: none; }
+}

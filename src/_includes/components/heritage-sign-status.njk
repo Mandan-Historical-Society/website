@@ -1,0 +1,52 @@
+{% for source in sources %}
+  {% if source.type == "interpretive-sign" and source.photographStatus == "awaiting-photograph" %}
+    <aside class="notice heritage-sign-status">
+      <strong>Plaque photograph forthcoming.</strong>
+      This home is known to have an interpretive yard plaque, but its photograph
+      and transcription have not yet been added to the collection.
+    </aside>
+  {% elif source.type == "interpretive-sign" and source.image and source.transcription %}
+    <aside class="supplemental-source" aria-labelledby="heritage-sign-{{ id }}-heading">
+      <div class="supplemental-source-heading">
+        <p class="eyebrow">On the property</p>
+        <h2 id="heritage-sign-{{ id }}-heading">{{ source.title }}</h2>
+        <p>
+          Photographed July 31, 2026. This {{ "cross-checked" if source.transcriptionStatus == "cross-checked" else "draft" }}
+          transcription preserves the wording printed on the sign.
+        </p>
+      </div>
+
+      <figure>
+        <a href="{{ source.image }}">
+          <img
+            src="{{ source.image }}"
+            alt="{{ source.imageAlt or source.title }}"
+            loading="lazy"
+          >
+        </a>
+        <figcaption>
+          {{ source.title }}. Select the photograph to view it at a larger
+          size.
+        </figcaption>
+      </figure>
+
+      <details class="source-transcription">
+        <summary>Read the {{ "cross-checked" if source.transcriptionStatus == "cross-checked" else "draft" }} sign transcription</summary>
+        <div>{% include source.transcription %}</div>
+      </details>
+    </aside>
+  {% elif source.type == "interpretive-sign" and source.image and source.transcriptionStatus == "needs-review" %}
+    <aside class="supplemental-source" aria-labelledby="heritage-sign-{{ id }}-heading">
+      <div class="supplemental-source-heading">
+        <p class="eyebrow">On the property</p>
+        <h2 id="heritage-sign-{{ id }}-heading">{{ source.title }}</h2>
+        <p>Photographed July 31, 2026. A reliable transcription has not yet been completed from this weathered sign.</p>
+      </div>
+      <figure>
+        <a href="{{ source.image }}"><img src="{{ source.image }}" alt="{{ source.imageAlt or source.title }}" loading="lazy"></a>
+        <figcaption>{{ source.title }}. Select the photograph to view it at a larger size.</figcaption>
+      </figure>
+      <aside class="notice"><strong>Transcription in progress.</strong> The photograph is preserved and published, but its wording still needs a complete review.</aside>
+    </aside>
+  {% endif %}
+{% endfor %}

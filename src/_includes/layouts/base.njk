@@ -6,6 +6,10 @@
     <meta name="description" content="{{ description or site.tagline }}">
     <title>{% if title %}{{ title }} | {% endif %}{{ site.name }}</title>
     <link rel="stylesheet" href="/assets/styles.css">
+    <link rel="stylesheet" href="/assets/feedback.css">
+    {% if mapAssets %}
+      <link rel="stylesheet" href="/assets/vendor/maplibre/maplibre-gl.css">
+    {% endif %}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -17,6 +21,27 @@
           <span class="identity-tagline">{{ site.tagline }}</span>
         </span>
       </a>
+      <div class="header-actions">
+        <div class="demo-feedback">
+          <span>Demo site feedback</span>
+          <a
+            data-feedback-link
+            href="mailto:aaron@axvigs.com?subject=Mandan%20Historical%20Society%20demo%20feedback&amp;body=Page%3A%20{{ page.url }}"
+          >aaron@axvigs.com</a>
+        </div>
+        <button
+          class="mobile-menu-button"
+          type="button"
+          aria-controls="site-navigation-panel"
+          aria-expanded="false"
+          aria-label="Open site menu"
+          data-navigation-toggle
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
     </header>
 
     <div class="site-shell">
@@ -32,7 +57,7 @@
             {% endfor %}
           </ul>
         {% endmacro %}
-        <details open>
+        <details id="site-navigation-panel" data-site-navigation>
           <summary>Explore the collection</summary>
           <nav>{{ renderNavigation(navigationItems, navigation.key or section) | safe }}</nav>
         </details>
@@ -48,5 +73,44 @@
       <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
       <p>&copy; {{ currentYear }} {{ site.name }}</p>
     </footer>
+    {% if mapAssets %}
+      <script src="/assets/vendor/pmtiles.js"></script>
+      <script src="/assets/vendor/basemaps.js"></script>
+      <script type="module" src="/assets/map.js"></script>
+    {% endif %}
+    {% if articleVersions %}
+      <script src="/assets/vendor/diff.min.js"></script>
+      <script src="/assets/article-versions.js"></script>
+    {% endif %}
+    <script>
+      const navigationDetails = document.querySelector("[data-site-navigation]");
+      const navigationToggle = document.querySelector("[data-navigation-toggle]");
+      const desktopNavigation = window.matchMedia("(min-width: 761px)");
+
+      const setNavigation = (open) => {
+        navigationDetails.open = open;
+        navigationToggle.setAttribute("aria-expanded", String(open));
+        navigationToggle.setAttribute("aria-label", open ? "Close site menu" : "Open site menu");
+      };
+
+      const syncNavigation = (event) => {
+        setNavigation(event.matches);
+      };
+
+      if (navigationDetails && navigationToggle) {
+        syncNavigation(desktopNavigation);
+        desktopNavigation.addEventListener("change", syncNavigation);
+        navigationToggle.addEventListener("click", () => {
+          setNavigation(!navigationDetails.open);
+        });
+      }
+
+      const feedbackLink = document.querySelector("[data-feedback-link]");
+      if (feedbackLink) {
+        const subject = "Mandan Historical Society demo feedback";
+        const body = `Page: ${window.location.href}\n\nFeedback:\n`;
+        feedbackLink.href = `mailto:aaron@axvigs.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      }
+    </script>
   </body>
 </html>

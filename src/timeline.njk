@@ -1,0 +1,38 @@
+---
+layout: layouts/page.njk
+title: Timeline
+eyebrow: Explore
+summary: Significant events drawn from Mandan’s historical record, arranged chronologically.
+navigation:
+  key: timeline
+  label: Timeline
+  parent: explore
+  order: 20
+permalink: /timeline/
+---
+{% set groups = collections.records | timelineGroups %}
+
+<p class="notice">
+  This timeline is curated rather than exhaustive. It emphasizes significant
+  community events and excludes routine birth and death dates or incidental
+  years mentioned in passing.
+</p>
+
+<div class="timeline">
+  {% for group in groups %}
+    <section class="timeline-decade" aria-labelledby="timeline-{{ group.decade }}">
+      <h2 id="timeline-{{ group.decade }}">{{ group.decade }}</h2>
+      <ol>
+        {% for event in group.events %}
+          <li>
+            <time datetime="{{ event.date }}">{{ event.displayDate or event.date }}</time>
+            <div>
+              <p>{{ event.label }}</p>
+              <a href="{{ event.record.url }}">{{ event.record.data.title }}</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+  {% endfor %}
+</div>

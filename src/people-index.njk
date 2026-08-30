@@ -1,0 +1,65 @@
+---
+layout: layouts/page.njk
+title: People Index
+eyebrow: Explore the Archive
+summary: Find people wherever they are mentioned across the historical collection.
+navigation:
+  key: people-index
+  label: People Index
+  parent: explore
+  order: 30
+permalink: /explore/people/
+---
+{% set entries = collections.records | mentionIndex %}
+{% set letters = [] %}
+{% for entry in entries %}
+  {% if entry.kind == "person" and entry.sortLetter not in letters %}
+    {% set letters = (letters.push(entry.sortLetter), letters) %}
+  {% endif %}
+{% endfor %}
+
+<p class="notice">
+  This index grows as editors confirm people mentioned in additional articles.
+  A dotted link identifies a person who does not yet have a full biography.
+</p>
+
+<nav class="index-letter-navigation" aria-label="Jump to last-name initial">
+  <span>Jump to:</span>
+  <ul>
+    {% for letter in letters %}
+      <li><a href="#last-name-{{ letter }}">{{ letter }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+
+<div class="entity-index entity-index-single">
+  <section aria-labelledby="people-index-heading">
+    <h2 id="people-index-heading">People by last name</h2>
+    {% set currentLetter = "" %}
+    {% for entry in entries %}
+      {% if entry.kind == "person" %}
+        {% if entry.sortLetter != currentLetter %}
+          {% set currentLetter = entry.sortLetter %}
+          <h3 class="entity-index-letter" id="last-name-{{ entry.sortLetter }}">
+            {{ entry.sortLetter }}
+          </h3>
+        {% endif %}
+        <article class="entity-index-entry" id="index-person-{{ entry.id }}">
+          <h4>
+            {% if entry.record.data.entityStatus != "mention-only" and entry.record.url %}
+              <a href="{{ entry.record.url }}">{{ entry.name }}</a>
+            {% else %}
+              <a href="{{ entry.sources[0].url }}">{{ entry.name }}</a>
+            {% endif %}
+          </h4>
+          <p>Mentioned in:</p>
+          <ul>
+            {% for source in entry.sources %}
+              <li><a href="{{ source.url }}">{{ source.record.data.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </article>
+      {% endif %}
+    {% endfor %}
+  </section>
+</div>

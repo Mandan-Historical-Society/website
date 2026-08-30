@@ -55,6 +55,11 @@ related:
     - stuart-dunlap
   places: []
   records: []
+mentions:
+  people:
+    - lyman-cary
+  places:
+    - northern-pacific-railway
 legacy:
   url: http://www.mandanhistory.org/heritagehomes/dunlapharrishome.html
   sourceFile: old-site/Dunlap-Harris Home - Mandan Historical Society.html
@@ -63,7 +68,76 @@ migration:
   editorialReview: false
 ```
 
-`id` is a stable identifier and should not change when a title or URL changes. Relationships refer to IDs rather than titles or paths.
+`id` is a stable identifier and should not change when a title or URL changes.
+Relationships and mentions refer to IDs rather than titles or paths.
+
+### Mentions and the shared index
+
+`related` and `mentions` serve different purposes:
+
+- `related` identifies deliberately selected further reading.
+- `mentions` identifies people and places that actually appear in the article.
+
+Eleventy should invert the `mentions` metadata at build time to create separate
+alphabetical People and Places indexes. The same data should provide “Mentioned
+in” lists on person and place pages and “People mentioned” and “Places
+mentioned” lists on article pages.
+
+Mentions must use stable record IDs so alternate names, initials, married names,
+nicknames, and spelling variants all lead to the same entity. Automated text
+scanning may suggest mentions or identify likely omissions, but it should not be
+authoritative because many historical names are ambiguous. Editors should
+confirm the structured metadata.
+
+Articles with copy-edited content may confirm a person directly in the prose
+with the `person` paired shortcode:
+
+```njk
+{% person "ernie-rober" %}Ernie Rober{% endperson %}
+```
+
+Places use the parallel `place` paired shortcode:
+
+```njk
+{% place "custer-memorial-amphitheater" %}
+  Custer Memorial Amphitheater
+{% endplace %}
+```
+
+The stable ID is explicit so aliases and repeated references can resolve to the
+same person or place. The text inside the shortcode is only the wording shown
+at that occurrence. It does not define the entity's canonical name:
+
+```njk
+{% person "blossom-lang-mcgillic" %}
+  Mrs. Blossom [Lang] McGillic
+{% endperson %}
+```
+
+Every marked entity must have one authoritative record. A full person or place
+article is its record when one exists. Entities without full articles use small
+records under `src/entities/people/` or `src/entities/places/`:
+
+```yaml
+title: Ernie Rober
+id: ernie-rober
+kind: person
+entityStatus: mention-only
+tags: records
+permalink: false
+```
+
+`title` is the canonical index name. `entityStatus: mention-only` prevents an
+empty standalone page from being generated. The entity still appears in the
+appropriate index, and its dotted-underlined prose mention links to that index
+entry. The index links back to the highlighted occurrence in the copy-edited
+article. Repeated occurrences receive unique anchors.
+
+To promote an entity, add substantive article content to its existing record,
+give it the normal page layout and section metadata, remove `permalink: false`,
+and change or remove `entityStatus`. Mentions then link to the published article
+with a normal solid underline. The stable `id` and all existing shortcodes stay
+unchanged.
 
 ## Record kinds found in the samples
 
@@ -213,11 +287,15 @@ Migration and editing are separate operations.
 4. Add accessibility text and structured metadata in clearly separate fields.
 5. Make factual or copy edits only in later, reviewable commits.
 
-The raw archive remains outside Git. The migrated content, selected original-quality assets, provenance metadata, and any extraction manifest belong in Git.
+The original WACZ capture is versioned in Git at
+`archive/source/mandanhistory-org.wacz` as an immutable historical artifact.
+Migrated content, selected original-quality assets, provenance metadata, and
+extraction manifests also belong in Git. Generated extraction workspaces and
+other reproducible intermediate files should remain outside Git.
 
-## Future WACZ import
+## WACZ import
 
-Browsertrix normally exports a `.wacz` file: a ZIP package containing WARC captures, an index, page metadata, and package metadata. When the archive is available, an importer can:
+Browsertrix exports a `.wacz` file: a ZIP package containing WARC captures, an index, page metadata, and package metadata. The preserved archive at `archive/source/mandanhistory-org.wacz` can be used by an importer to:
 
 1. Inventory captured page URLs from `pages/pages.jsonl`.
 2. Extract the selected HTML response for each canonical URL.
@@ -228,6 +306,91 @@ Browsertrix normally exports a `.wacz` file: a ZIP package containing WARC captu
 7. Report missing resources, conflicting captures, malformed pages, and links that leave the archive.
 
 Extraction should be deterministic and rerunnable. Page-specific cleanup belongs after the faithful import rather than inside the importer.
+
+## Editorial versions
+
+The Alice Kennedy Dahners biography is the prototype for separately preserved
+original and copy-edited article text. Its page metadata and version controls
+live in `src/biographies/alice-kennedy-dahners/index.njk`; the two article
+fragments live under `src/_includes/articles/alice-kennedy-dahners/`.
+
+The original fragment preserves the migrated wording. The copy-edited fragment
+may correct grammar, spelling, punctuation, consistency, and clarity, but
+factual changes require a separate historical review. The page offers Original,
+Copy-edited, and Compare views. Compare uses jsdiff to calculate word-level
+changes in the browser and presents them side by side on wider screens or
+stacked on narrow screens.
+
+Versioned pages declare their editorial state in front matter:
+
+```yaml
+articleVersions: true
+editorial:
+  status: draft
+  defaultView: original
+```
+
+While an edit is a draft, the original text is the default. A reviewed article
+can change `status` and `defaultView` in a later, separately reviewable commit.
+
+## Inflation-adjusted amounts
+
+Copy-edited articles may replace obsolete fixed-year inflation comparisons with
+a build-time inflation helper. Historical amounts must specify both the nominal
+amount and its source year rather than relying on the surrounding prose:
+
+```njk
+{% inflation 60000, 1958 %}
+```
+
+The helper should calculate purchasing-power equivalents using annual CPI-U,
+U.S. city average, all items, not seasonally adjusted. Normalized CPI values
+belong in a committed `src/_data/cpi.json` file along with source-series and
+provenance metadata.
+
+The file may contain only the historical source years currently used by the
+site plus the desired target year; it does not need to reproduce the entire CPI
+series.
+
+The adjustment target is always the greatest year actually present in
+`cpi.json`, regardless of the current calendar year. For example, if 2024 is
+the latest entry and the calculated equivalent is $500, the comparison should
+read:
+
+> about $500 in 2024 dollars
+
+Updating CPI data is an occasional manual editorial task. Builds must not fetch
+CPI data from the network, infer unavailable years, or require an automatic
+update script. The build should fail with a useful error if an article requests
+a source year absent from the data.
+
+Legacy fixed-year comparisons remain unchanged in the Original version.
+Dynamic adjustments belong in the Copy-edited version so the editorial change
+is visible in Compare mode.
+
+## Timeline events
+
+Historical records may declare a curated list of significant events:
+
+```yaml
+timeline:
+  - date: "1881-02-24"
+    displayDate: February 24, 1881
+    label: Mandan was officially incorporated as a village.
+    category: government
+```
+
+`date` is an ISO-style sortable value and may contain a year, year and month, or
+complete date. `displayDate` preserves the appropriate human-readable
+precision. `label` should describe a meaningful community event in one concise
+sentence, and `category` supports future filtering.
+
+Eleventy combines these entries at build time to generate the master Timeline
+and links every event to its source article. Timeline entries are editorial
+metadata, not an automatic extraction of every year in the prose. Routine birth
+and death dates, incidental dates, and dates that provide context without
+describing an event should normally be excluded. Automated scanning may suggest
+candidates, but editors select the historically useful entries.
 
 ## Decisions still needed
 

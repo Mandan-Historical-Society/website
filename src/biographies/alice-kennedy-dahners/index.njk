@@ -1,0 +1,59 @@
+---
+layout: layouts/page.njk
+title: "Alice [Kennedy] Dahners (1885-1964)"
+eyebrow: Biography
+description: "Alice Dahners was born on December 2, 1885, to Thomas and Alice (Slattery) Kennedy at her parents homestead near Hazen, North Dakota."
+id: alice-kennedy-dahners
+kind: person
+section: biographies
+order: 200
+tags: records
+legacyUrl: http://www.mandanhistory.org/biographiesdl/alicedahners.html
+sourceFile: archive/source/mandanhistory-org.wacz
+capturedAt: 2026-05-30T00:02:28Z
+articleVersions: true
+editorial:
+  status: draft
+  defaultView: original
+mentions:
+  people:
+    - henry-l-dahners
+  places:
+    - hotel-nigey
+    - lewis-and-clark-hotel
+card:
+  title: "Alice [Kennedy] Dahners (1885-1964)"
+  meta: ""
+  image: /assets/images/biographies/alice-kennedy-dahners/200-dahners-alice-kennedy.jpg
+  imageAlt: "Historic image from the Alice [Kennedy] Dahners (1885-1964) page"
+---
+<section class="article-versions" data-article-versions data-default-view="{{ editorial.defaultView }}">
+  <div class="article-version-toolbar">
+    <div class="article-version-controls" role="group" aria-label="Article version">
+      <button type="button" data-article-view="original" aria-pressed="true">Original</button>
+      <button type="button" data-article-view="copy-edited" aria-pressed="false">Copy-edited</button>
+      <button type="button" data-article-view="compare" aria-pressed="false">Compare</button>
+    </div>
+    <p class="article-version-note">
+      The copy-edited text corrects grammar, spelling, punctuation, and clarity without intentional factual changes.
+    </p>
+  </div>
+
+  <div data-article-panel="original">
+    <h2 class="visually-hidden">Original article</h2>
+    {% include "articles/alice-kennedy-dahners/original.njk" %}
+  </div>
+
+  <div data-article-panel="copy-edited" hidden>
+    <h2 class="visually-hidden">Copy-edited article</h2>
+    {% include "articles/alice-kennedy-dahners/copy-edited.njk" %}
+  </div>
+
+  <div data-article-panel="compare" hidden>
+    <div class="article-diff-heading" aria-hidden="true">
+      <span>Original</span>
+      <span>Copy-edited</span>
+    </div>
+    <div class="article-diff" data-article-diff aria-label="Comparison of original and copy-edited article text"></div>
+  </div>
+</section>
