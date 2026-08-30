@@ -11,7 +11,7 @@
         <p class="eyebrow">On the property</p>
         <h2 id="heritage-sign-{{ id }}-heading">{{ source.title }}</h2>
         <p>
-          Photographed July 31, 2026. This {{ "cross-checked" if source.transcriptionStatus == "cross-checked" else "draft" }}
+          Photographed {{ source.photographedOn or "July 31, 2026" }}. This {{ "cross-checked" if source.transcriptionStatus == "cross-checked" else "draft" }}
           transcription preserves the wording printed on the sign.
         </p>
       </div>
@@ -40,7 +40,7 @@
       <div class="supplemental-source-heading">
         <p class="eyebrow">On the property</p>
         <h2 id="heritage-sign-{{ id }}-heading">{{ source.title }}</h2>
-        <p>Photographed July 31, 2026. A reliable transcription has not yet been completed from this weathered sign.</p>
+        <p>Photographed {{ source.photographedOn or "July 31, 2026" }}. A reliable transcription has not yet been completed from this weathered sign.</p>
       </div>
       <figure>
         <a href="{{ source.image }}"><img src="{{ source.image }}" alt="{{ source.imageAlt or source.title }}" loading="lazy"></a>

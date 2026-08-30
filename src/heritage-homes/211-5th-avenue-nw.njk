@@ -1,8 +1,8 @@
 ---
 layout: layouts/page.njk
-title: Heritage Home - 211 5th Avenue NW
+title: Haskins Home - 211 5th Avenue NW
 eyebrow: Heritage Home
-description: A Heritage Home sign stands at 211 5th Avenue NW in Mandan.
+description: The Haskins Home is identified by a Heritage Home sign at 211 5th Avenue NW.
 address: 211 5th Avenue NW, Mandan, ND
 id: 211-5th-avenue-nw
 kind: place
@@ -14,20 +14,24 @@ place:
   collection: heritage-homes
 sources:
   - type: interpretive-sign
-    title: Heritage Home sign
-    photographStatus: awaiting-photograph
-    transcriptionStatus: awaiting-photograph
+    title: Haskins Home heritage sign
+    image: /assets/images/heritage-signs/211-5th-avenue-nw-sign-2026.jpg
+    imageAlt: A Heritage Home sign for the Haskins Home with the house behind it
+    sourceFile: archive/source/heritage-signs/PXL_20260813_224200043.jpg
+    photographedAt: 2026-08-13T17:42:00-05:00
+    photographedOn: August 13, 2026
+    photoLatitude: 46.827325
+    photoLongitude: -100.897847222222
+    transcription: transcriptions/haskins-home-sign.njk
+    transcriptionStatus: draft
 card:
-  title: 211 5th Avenue NW
-  meta: Sign photograph and history forthcoming
+  title: Haskins Home
+  meta: 211 5th Avenue NW
+  image: /assets/images/heritage-signs/211-5th-avenue-nw-sign-2026.jpg
+  imageAlt: The Haskins Home heritage sign
 ---
 <p class="lede">
-  A Heritage Home interpretive sign stands at this address. A photograph and
-  transcription have not yet been added to the collection.
+  The property’s interpretive sign identifies this as the Haskins Home.
 </p>
 
-<aside class="notice">
-  <strong>Record in progress.</strong>
-  The sign photograph will be used to confirm the home’s historical name,
-  location, and displayed history.
-</aside>
+{% include "components/heritage-sign-status.njk" %}
