@@ -46,13 +46,13 @@ img { display: block; max-width: 100%; height: auto; }
   padding: 1.25rem max(1.25rem, calc((100vw - var(--content-width)) / 2));
   color: white;
   background-color: var(--green);
-  background-image:
-    linear-gradient(rgba(37, 76, 59, 0.89), rgba(37, 76, 59, 0.94)),
-    url("/assets/images/area-history/1870s/409-1865-dakota-territory-map-cropped.jpg");
-  background-position: center, center 46%;
-  background-repeat: repeat, repeat-x;
-  background-size: auto, 29rem auto;
+  background-image: url("/assets/images/header/main-street-birdseye-clean.jpg");
+  background-position: right 86%;
+  background-repeat: no-repeat;
+  background-size: clamp(52rem, 78vw, 76rem) auto;
   border-bottom: 0.35rem solid var(--gold);
+  box-shadow: inset 0 -1px rgba(255, 255, 255, 0.16);
+  text-shadow: 0 1px 2px rgba(20, 24, 21, 0.95), 0 0 0.45rem rgba(20, 24, 21, 0.8);
 }
 
 .identity {
@@ -72,6 +72,7 @@ img { display: block; max-width: 100%; height: auto; }
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.65);
   border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(20, 24, 21, 0.75);
   font-size: 1.55rem;
 }
 
@@ -105,6 +106,7 @@ img { display: block; max-width: 100%; height: auto; }
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.65);
   border-radius: 0.2rem;
+  box-shadow: 0 1px 3px rgba(20, 24, 21, 0.75);
   cursor: pointer;
 }
 
