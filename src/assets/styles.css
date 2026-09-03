@@ -45,7 +45,13 @@ img { display: block; max-width: 100%; height: auto; }
 .site-header {
   padding: 1.25rem max(1.25rem, calc((100vw - var(--content-width)) / 2));
   color: white;
-  background: var(--green);
+  background-color: var(--green);
+  background-image:
+    linear-gradient(rgba(37, 76, 59, 0.89), rgba(37, 76, 59, 0.94)),
+    url("/assets/images/area-history/1870s/409-1865-dakota-territory-map-cropped.jpg");
+  background-position: center, center 46%;
+  background-repeat: repeat, repeat-x;
+  background-size: auto, 29rem auto;
   border-bottom: 0.35rem solid var(--gold);
 }
 
@@ -179,6 +185,55 @@ img { display: block; max-width: 100%; height: auto; }
 .hero {
   max-width: 48rem;
   margin-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+.home-hero { max-width: none; }
+
+.home-hero-copy { max-width: 48rem; }
+
+.home-hero-copy > p:last-child {
+  max-width: 42rem;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  line-height: 1.5;
+}
+
+.home-hero-figure {
+  position: relative;
+  isolation: isolate;
+  margin-top: clamp(1.75rem, 4vw, 3rem);
+}
+
+.home-hero-figure::after {
+  position: absolute;
+  z-index: -1;
+  right: -0.6rem;
+  bottom: 1.45rem;
+  width: 55%;
+  height: 72%;
+  background: var(--gold);
+  content: "";
+}
+
+.home-hero-figure img {
+  width: 100%;
+  border: 0.3rem solid rgba(255, 255, 255, 0.72);
+  box-shadow: 0 0.8rem 2.2rem rgba(39, 43, 40, 0.18);
+}
+
+.home-hero-figure figcaption {
+  display: flex;
+  gap: 0.65rem;
+  align-items: baseline;
+  padding-top: 0.65rem;
+}
+
+.home-hero-date {
+  color: var(--gold);
+  font-size: 0.63rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .hero h1,
@@ -958,6 +1013,11 @@ figcaption {
   .article-diff-row p + p {
     border-top: 1px dashed var(--rule);
     border-left: 0;
+  }
+
+  .home-hero-figure::after {
+    right: -0.35rem;
+    bottom: 1.35rem;
   }
 }
 

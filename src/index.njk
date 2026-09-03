@@ -7,10 +7,32 @@ navigation:
   label: Home
   order: 0
 ---
-<section class="hero">
-  <p class="eyebrow">Mandan, North Dakota</p>
-  <h1>Every place has a story.</h1>
-  <p>Discover the people, homes, landmarks, and publications that preserve Mandan's history.</p>
+<section class="hero home-hero">
+  <div class="home-hero-copy">
+    <p class="eyebrow">Mandan, North Dakota</p>
+    <h1>Every place has a story.</h1>
+    <p>Discover the people, homes, landmarks, and publications that preserve Mandan's history.</p>
+  </div>
+  <figure class="home-hero-figure">
+    <picture>
+      <source
+        srcset="/assets/images/home/mandan-from-west-1200.jpg 1200w, /assets/images/home/mandan-from-west-2400.jpg 2400w"
+        sizes="(max-width: 760px) calc(100vw - 2.5rem), (max-width: 1200px) calc(100vw - 20rem), 53rem"
+      >
+      <img
+        src="/assets/images/home/mandan-from-west-2400.jpg"
+        width="2400"
+        height="950"
+        alt="A panoramic view of Mandan from the west, with homes in the foreground and churches rising along the distant ridge"
+        fetchpriority="high"
+        decoding="async"
+      >
+    </picture>
+    <figcaption>
+      <span class="home-hero-date">Circa 1900</span>
+      <span>Mandan from the west</span>
+    </figcaption>
+  </figure>
 </section>
 
 <section aria-labelledby="explore-heading">
