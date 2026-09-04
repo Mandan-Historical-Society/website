@@ -6,12 +6,18 @@
       and transcription have not yet been added to the collection.
     </aside>
   {% elif source.type == "interpretive-sign" and source.image and source.transcription %}
+    {% set transcriptionLabel = "draft" %}
+    {% if source.transcriptionStatus == "reviewed" %}
+      {% set transcriptionLabel = "reviewed" %}
+    {% elif source.transcriptionStatus == "cross-checked" %}
+      {% set transcriptionLabel = "cross-checked" %}
+    {% endif %}
     <aside class="supplemental-source" aria-labelledby="heritage-sign-{{ id }}-heading">
       <div class="supplemental-source-heading">
         <p class="eyebrow">On the property</p>
         <h2 id="heritage-sign-{{ id }}-heading">{{ source.title }}</h2>
         <p>
-          Photographed {{ source.photographedOn or "July 31, 2026" }}. This {{ "cross-checked" if source.transcriptionStatus == "cross-checked" else "draft" }}
+          Photographed {{ source.photographedOn or "July 31, 2026" }}. This {{ transcriptionLabel }}
           transcription preserves the wording printed on the sign.
         </p>
       </div>
@@ -31,7 +37,7 @@
       </figure>
 
       <details class="source-transcription">
-        <summary>Read the {{ "cross-checked" if source.transcriptionStatus == "cross-checked" else "draft" }} sign transcription</summary>
+        <summary>Read the {{ transcriptionLabel }} sign transcription</summary>
         <div>{% include source.transcription %}</div>
       </details>
     </aside>
