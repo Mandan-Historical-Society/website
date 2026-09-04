@@ -7,6 +7,10 @@
 
 .demo-feedback {
   flex: 0 0 auto;
+  padding: 0.45rem 0.65rem;
+  background: rgba(25, 48, 38, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.2rem;
   font-family: system-ui, sans-serif;
   font-size: 0.72rem;
   line-height: 1.35;
