@@ -20,7 +20,7 @@ layout: layouts/base.njk
           <h3>People and places in this article</h3>
           <ul>
             {% for record in mentioned %}
-              <li><a href="{{ record.url }}">{{ record.data.title }}</a></li>
+              <li><a href="{{ record | entityRecordUrl }}">{{ record.data.title }}</a></li>
             {% endfor %}
           </ul>
         {% endif %}

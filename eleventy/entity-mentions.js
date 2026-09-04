@@ -255,8 +255,14 @@ function addOccurrenceAnchors(content) {
 }
 
 function inlineEntityShortcode(inlineEntities, kind, visibleName, id, context) {
-  if (!inlineEntities[kind].has(id)) {
-    throw new Error(`Inline ${kind} "${id}" was not discovered in source`);
+  const declaredInFrontMatter = (context?.mentions?.[
+    kind === "person" ? "people" : "places"
+  ] ?? []).includes(id);
+  if (!inlineEntities[kind].has(id) && !declaredInFrontMatter) {
+    throw new Error(
+      `Inline ${kind} "${id}" was neither discovered in a copy-edited ` +
+        `article nor declared in this record's mentions`,
+    );
   }
   const record = context?.collections?.records?.find(
     (candidate) =>
@@ -277,6 +283,14 @@ function inlineEntityShortcode(inlineEntities, kind, visibleName, id, context) {
   return `<a class="${className}" data-${kind}="${id}" href="${url}">${visibleName}</a>`;
 }
 
+function entityRecordUrl(record) {
+  if (record.data.entityStatus !== "mention-only" && record.url) {
+    return record.url;
+  }
+  const indexName = record.data.kind === "person" ? "people" : "places";
+  return `/explore/${indexName}/#index-${record.data.kind}-${record.data.id}`;
+}
+
 export default function entityMentionsPlugin(
   eleventyConfig,
   {
@@ -290,6 +304,7 @@ export default function entityMentionsPlugin(
 
   eleventyConfig.addFilter("mentionedRecords", mentionedRecords);
   eleventyConfig.addFilter("mentionsOf", mentionsOf);
+  eleventyConfig.addFilter("entityRecordUrl", entityRecordUrl);
   eleventyConfig.addFilter(
     "mentionIndex",
     (collection) => mentionIndex(collection, inlineEntities),

@@ -177,6 +177,33 @@ A transcription preserves the sign as a source:
 Normal typographic characters such as curly apostrophes may be used without
 changing the wording. Paragraph breaks may follow the sign's visual sections.
 
+## People and place indexing
+
+Entity indexing is part of transcription review. Before changing a
+`transcriptionStatus` to `reviewed`:
+
+1. Identify the historical people and local historical places named in the
+   transcription.
+2. Reuse existing biography, place, or mention-only record IDs wherever
+   possible.
+3. Create a mention-only entity record when the identity is clear but no record
+   exists.
+4. Add the IDs to the Heritage Home page's `mentions.people` or
+   `mentions.places` front matter.
+5. Wrap the first useful occurrence in the transcription with the corresponding
+   `person` or `place` paired shortcode.
+6. Build the site and verify the inline links, the page's Connections list, and
+   the People or Places index entries.
+
+The front-matter declaration is required for shortcodes inside transcription
+includes. It lets the index associate those occurrences with the Heritage Home
+record while keeping the transcription in its own file.
+
+Do not assign an ID when initials, a surname, or a relationship are too
+ambiguous to establish identity. Do not index unnamed people, organizations,
+businesses, or every incidental geographic reference. Adding shortcode markup
+does not alter the transcribed wording.
+
 The sign transcription is not the `original` version of a Heritage Homes
 article. The sign and article are distinct sources. The site's Original,
 Copy-edited, and Compare controls remain reserved for editorial variants of the
