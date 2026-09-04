@@ -104,6 +104,27 @@ defaultView: original
 The original and copy-edited include files contain article body markup only.
 Do not duplicate front matter inside them.
 
+### Editorial status and publication
+
+While a copy-edit awaits approval, use `editorial.status: draft`. Draft pages
+show the Original, Copy-edited, and Compare selector so reviewers can inspect
+the changes.
+
+After a reviewer approves the complete copy-edit, use:
+
+```yaml
+editorial:
+  status: confirmed
+  confirmedAt: 2026-09-03
+  defaultView: copy-edited
+```
+
+A confirmed page publishes only the copy-edited article. It does not render the
+selector, original text, comparison markup, or comparison scripts, even when a
+visitor supplies a `view` query parameter. Keep both article include files in
+the repository so the archived wording and editorial history remain available
+to future editors.
+
 ### Original version
 
 Preserve the original displayed wording, including errors. Semantic markup may

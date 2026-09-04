@@ -1,3 +1,6 @@
+{% if editorial.status == "confirmed" %}
+  {% include "articles/" + articleVersionKey + "/copy-edited.njk" %}
+{% else %}
 <section class="article-versions" data-article-versions data-default-view="{{ editorial.defaultView }}">
   <div class="article-version-toolbar">
     <div class="article-version-controls" role="group" aria-label="Article version">
@@ -26,3 +29,4 @@
     <div class="article-diff" data-article-diff aria-label="Comparison of original and copy-edited article text and captions"></div>
   </div>
 </section>
+{% endif %}

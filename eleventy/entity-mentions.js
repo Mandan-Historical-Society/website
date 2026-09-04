@@ -188,9 +188,9 @@ function mentionIndex(collection, inlineEntities) {
           }
           return {
             record: source,
-            url:
-              `${source.url}?view=copy-edited` +
-              `#${entity.kind}-${entity.id}`,
+            url: source.data.editorial?.status === "confirmed"
+              ? `${source.url}#${entity.kind}-${entity.id}`
+              : `${source.url}?view=copy-edited#${entity.kind}-${entity.id}`,
           };
         },
       );
