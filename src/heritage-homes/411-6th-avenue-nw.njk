@@ -14,6 +14,19 @@ place:
   collection: heritage-homes
   latitude: 46.829201
   longitude: -100.899940
+mentions:
+  people:
+    - benjamin-whitworth-b-w-shaw
+    - agaton-larson
+    - william-a-lanterman
+    - georgia-lanterman-shaw
+    - f-e-bowen
+    - s-l-nuchols
+    - paula-milan-olsen
+  places:
+    - hager-lumber-yard
+    - north-dakota-state-bar-association
+    - north-dakota-house-of-representatives
 sources:
   - type: interpretive-sign
     title: Shaw Home heritage sign
@@ -24,7 +37,8 @@ sources:
     photoLatitude: 46.829216666667
     photoLongitude: -100.900002777778
     transcription: transcriptions/shaw-home-sign.njk
-    transcriptionStatus: draft
+    transcriptionStatus: reviewed
+    transcriptionReviewedAt: 2026-09-08
 card:
   title: Shaw Home
   meta: 411 6th Avenue NW
@@ -34,18 +48,4 @@ card:
 <p class="lede">
   The property’s interpretive sign identifies this as the Shaw Home.
 </p>
-<aside class="supplemental-source" aria-labelledby="shaw-sign-heading">
-  <div class="supplemental-source-heading">
-    <p class="eyebrow">On the property</p>
-    <h2 id="shaw-sign-heading">Shaw Home heritage sign</h2>
-    <p>Photographed July 31, 2026. This draft transcription awaits a second review.</p>
-  </div>
-  <figure>
-    <a href="/assets/images/heritage-signs/411-6th-avenue-nw-sign-2026.jpg"><img src="/assets/images/heritage-signs/411-6th-avenue-nw-sign-2026.jpg" alt="A Heritage Home sign for the Shaw Home with the house behind it" loading="lazy"></a>
-    <figcaption>Shaw Home heritage sign. Select the photograph to view it at a larger size.</figcaption>
-  </figure>
-  <details class="source-transcription">
-    <summary>Read the draft sign transcription</summary>
-    <div>{% include "transcriptions/shaw-home-sign.njk" %}</div>
-  </details>
-</aside>
+{% include "components/heritage-sign-status.njk" %}
