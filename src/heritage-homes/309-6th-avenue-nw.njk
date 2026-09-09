@@ -14,6 +14,20 @@ place:
   collection: heritage-homes
   latitude: 46.828020
   longitude: -100.899661
+mentions:
+  people:
+    - j-e-pilcher
+    - walter-pilcher
+    - maggie-pilcher
+    - george-h-bingenheimer
+    - margaret-bowers-bingenheimer
+    - james-h-mcdonald
+    - elizabeth-mcdonald
+    - linda-axness
+    - charles-axness
+  places:
+    - custer-home-fort-abraham-lincoln
+    - fort-abraham-lincoln
 sources:
   - type: interpretive-sign
     title: McDonald Home heritage sign
@@ -24,7 +38,8 @@ sources:
     photoLatitude: 46.829216666667
     photoLongitude: -100.900002777778
     transcription: transcriptions/mcdonald-home-sign.njk
-    transcriptionStatus: draft
+    transcriptionStatus: reviewed
+    transcriptionReviewedAt: 2026-09-08
 card:
   title: McDonald Home
   meta: 309 6th Avenue NW
@@ -34,18 +49,4 @@ card:
 <p class="lede">
   The property’s interpretive sign identifies this as the McDonald Home.
 </p>
-<aside class="supplemental-source" aria-labelledby="mcdonald-sign-heading">
-  <div class="supplemental-source-heading">
-    <p class="eyebrow">On the property</p>
-    <h2 id="mcdonald-sign-heading">McDonald Home heritage sign</h2>
-    <p>Photographed July 31, 2026. This draft transcription awaits a second review.</p>
-  </div>
-  <figure>
-    <a href="/assets/images/heritage-signs/309-6th-avenue-nw-sign-2026.jpg"><img src="/assets/images/heritage-signs/309-6th-avenue-nw-sign-2026.jpg" alt="A weathered Heritage Home sign for the McDonald Home among tree branches" loading="lazy"></a>
-    <figcaption>McDonald Home heritage sign. Select the photograph to view it at a larger size.</figcaption>
-  </figure>
-  <details class="source-transcription">
-    <summary>Read the draft sign transcription</summary>
-    <div>{% include "transcriptions/mcdonald-home-sign.njk" %}</div>
-  </details>
-</aside>
+{% include "components/heritage-sign-status.njk" %}
