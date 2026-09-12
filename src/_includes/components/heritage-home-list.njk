@@ -1,0 +1,18 @@
+<div class="listing-grid heritage-home-list">
+  {% for record in records %}
+    {% set sign = record.data.sources[0] %}
+    {% set signThumbnail = sign.image | replace("/assets/images/heritage-signs/", "/assets/images/thumbnails/heritage-homes/") %}
+    <a class="listing-card heritage-home-card{% if record.data.card.image and record.data.card.image != signThumbnail %} heritage-home-card-with-home{% endif %}" href="{{ record.url }}">
+      {% if record.data.card.image and record.data.card.image != signThumbnail %}
+        <img class="heritage-home-photo" src="{{ record.data.card.image }}" alt="{{ record.data.card.imageAlt or '' }}" loading="lazy">
+      {% endif %}
+      <span class="heritage-home-card-copy">
+        <strong>{{ record.data.card.title or record.data.title }}</strong>
+        {% if record.data.card.meta %}<small>{{ record.data.card.meta }}</small>{% endif %}
+      </span>
+      <img class="heritage-sign-photo" src="{{ signThumbnail }}" alt="{{ sign.imageAlt or sign.title }}" loading="lazy">
+    </a>
+  {% else %}
+    <p>No heritage homes have been added yet.</p>
+  {% endfor %}
+</div>
