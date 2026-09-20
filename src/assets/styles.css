@@ -43,6 +43,10 @@ img { display: block; max-width: 100%; height: auto; }
 .skip-link:focus { transform: none; }
 
 .site-header {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
   padding: 1.25rem max(1.25rem, calc((100vw - var(--content-width)) / 2));
   color: white;
   background-color: var(--green);
