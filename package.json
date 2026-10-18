@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "eleventy",
+    "watch": "eleventy --watch",
     "serve": "eleventy --serve",
     "check": "eleventy --dryrun"
   },

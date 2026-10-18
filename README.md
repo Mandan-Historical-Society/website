@@ -15,6 +15,33 @@ Create the deployable `_site` directory with:
 npm run build
 ```
 
+### VS Code Go Live
+
+Open this repository's `website` folder in VS Code, run `npm install` once,
+and install the recommended **Live Server** extension (`ritwickdey.LiveServer`).
+The project settings point **Go Live** at the generated `_site/` directory.
+Live Server serves the HTML; Eleventy must build the Nunjucks sources first.
+
+Reopen the folder and allow automatic tasks when VS Code prompts. The
+**Website: watch Eleventy** task builds the site and keeps rebuilding when
+source files change. Once its terminal says `Watching…`, click **Go Live**.
+Live Server opens the preview, normally at `http://127.0.0.1:5500/`, and
+reloads it as the generated files change.
+
+If automatic tasks are disabled, run **Tasks: Run Task → Website: watch
+Eleventy** from the Command Palette, or run `npm run watch` in a terminal,
+before clicking **Go Live**. In a workspace with multiple folders, use
+**Live Server: Change Live Server workspace** to select `website` first.
+Stop the watcher with **Tasks: Terminate Task** (or Ctrl+C in a terminal).
+
+If you open the parent `Mandan-Historical-Society` folder to work on both
+repositories, VS Code reads `.vscode/` from that parent instead. Set
+`liveServer.settings.root` there to `/website/_site` and run the watch task
+with its working directory set to `${workspaceFolder}/website`. In a
+multi-folder `.code-workspace`, put the Live Server root setting in the
+workspace file's `settings` object; the extension does not read it from
+individual folder settings.
+
 The interactive map uses a committed Morton and Burleigh County PMTiles
 baseline. See
 [`docs/vector-tiles.md`](docs/vector-tiles.md) for archive creation and
