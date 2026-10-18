@@ -9,6 +9,7 @@ layout: layouts/base.njk
   </header>
   <div class="article-body">
     {{ content | safe }}
+    {% if not articleVersions %}{% include "components/source-notes.njk" %}{% endif %}
   </div>
   {% if id and collections.records %}
     {% set mentioned = mentions | mentionedRecords(collections.records) %}

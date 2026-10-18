@@ -141,6 +141,15 @@ unchanged.
 
 ## Record kinds found in the samples
 
+### Implemented article citations
+
+Historical evidence uses shared bibliographic records in
+`src/_data/citationSources.json` and an article's `citations` note list. Inline
+`cite` shortcodes link claims to numbered notes with page/figure/archival
+locators. This is separate from Heritage Home `sources` metadata and legacy
+migration provenance. See [the citation guide](https://docs.mandanhistoricalsociety.org/Article-Citations) for the implemented
+schema, authoring process, and review requirements.
+
 ### Person
 
 The Margaret Bowers Bingenheimer page is the representative example.

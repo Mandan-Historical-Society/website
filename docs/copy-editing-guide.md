@@ -40,6 +40,12 @@ Make a factual correction only when the evidence is strong and the workflow
 explicitly includes fact-checking. Keep factual corrections separately
 reviewable whenever practical.
 
+For authorized factual additions, source notes, and new research, follow
+[Article citations and research additions](https://docs.mandanhistoricalsociety.org/Article-Citations). Read the source,
+cite the supporting passage, preserve the original include, and use a custom
+`editorial.note` that discloses the factual addition rather than the default
+copy-edit-only description.
+
 ## Preserve work already in progress
 
 Before editing:

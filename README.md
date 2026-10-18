@@ -97,6 +97,10 @@ indexing conventions, timeline selection, inflation handling, and validation
 checklist for article cleanup are documented in
 [`docs/copy-editing-guide.md`](docs/copy-editing-guide.md).
 
+Numbered source notes, shared bibliographic records, and the workflow for
+evidence-based article additions are documented in
+[Article citations and research additions](https://docs.mandanhistoricalsociety.org/Article-Citations).
+
 The intake, preservation, EXIF, transcription, discrepancy, and presentation
 workflow for neighborhood Heritage Home signs is documented in
 [`docs/heritage-sign-workflow.md`](docs/heritage-sign-workflow.md).

@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import entityMentionsPlugin from "./eleventy/entity-mentions.js";
+import citationsPlugin from "./eleventy/citations.js";
 
 const cpiData = JSON.parse(
   readFileSync(new URL("./src/_data/cpi.json", import.meta.url), "utf8"),
@@ -154,6 +155,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("timelineGroups", timelineGroups);
   eleventyConfig.addShortcode("inflation", inflation);
   eleventyConfig.addPlugin(entityMentionsPlugin);
+  eleventyConfig.addPlugin(citationsPlugin);
 
   return {
     dir: {

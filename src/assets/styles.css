@@ -321,6 +321,16 @@ img { display: block; max-width: 100%; height: auto; }
 .article-header h1 { font-size: clamp(2.25rem, 6vw, 4.6rem); }
 .article-body > p { max-width: 42rem; }
 
+.citation-reference { font-size: 0.72em; line-height: 0; }
+.citation-reference a { padding: 0.15em; text-decoration: none; }
+.citation-reference a:focus-visible { outline: 2px solid var(--gold); }
+.source-notes { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+.source-notes ol { padding-left: 1.5rem; font-size: 0.88rem; }
+.source-notes li { margin: 0.9rem 0; padding-left: 0.25rem; overflow-wrap: anywhere; scroll-margin-top: 2rem; }
+.source-notes li:target { background: var(--paper-deep); outline: 2px solid var(--gold); outline-offset: 0.25rem; }
+.source-locator { font-weight: 700; }
+.source-explanation { display: block; margin-top: 0.4rem; color: var(--muted); }
+
 .visually-hidden {
   position: absolute;
   width: 1px;

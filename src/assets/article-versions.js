@@ -13,7 +13,14 @@
     ]),
   );
   const diffContainer = article.querySelector("[data-article-diff]");
+  const sourceNotes = article.querySelector("[data-article-sources]");
   let diffIsRendered = false;
+
+  function proseText(block) {
+    const prose = block?.cloneNode(true);
+    prose?.querySelectorAll(".citation-reference").forEach((reference) => reference.remove());
+    return prose?.textContent ?? "";
+  }
 
   function appendChanges(target, changes, changeType) {
     for (const change of changes) {
@@ -51,7 +58,7 @@
     }
 
     const tokenize = (block) =>
-      (block?.textContent.toLocaleLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []);
+      (proseText(block).toLocaleLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []);
     const originalTokens = tokenize(originalBlock);
     const editedTokens = tokenize(editedBlock);
     if (!originalTokens.length && !editedTokens.length) {
@@ -153,8 +160,8 @@
     const alignedBlocks = alignBlocks(originalBlocks, editedBlocks);
 
     for (const [originalBlock, editedBlock] of alignedBlocks) {
-      const originalText = originalBlock?.textContent ?? "";
-      const editedText = editedBlock?.textContent ?? "";
+      const originalText = proseText(originalBlock);
+      const editedText = proseText(editedBlock);
       const isCaption =
         originalBlock?.tagName === "FIGCAPTION" ||
         editedBlock?.tagName === "FIGCAPTION";
@@ -179,6 +186,11 @@
 
       appendChanges(original, changes, "original");
       appendChanges(edited, changes, "copy-edited");
+      for (const [block, target] of [[originalBlock, original], [editedBlock, edited]]) {
+        block?.querySelectorAll(".citation-reference").forEach((reference) => {
+          target.append(reference.cloneNode(true));
+        });
+      }
       row.append(original, edited);
       diffContainer.append(row);
     }
@@ -197,6 +209,9 @@
 
     for (const [panelView, panel] of panels) {
       panel.hidden = panelView !== selectedView;
+    }
+    if (sourceNotes) {
+      sourceNotes.hidden = selectedView === "original";
     }
 
     for (const button of buttons) {
@@ -222,7 +237,9 @@
   }
 
   const requestedView = new URL(window.location).searchParams.get("view");
-  setView(requestedView || article.dataset.defaultView, false);
+  const sourceTarget = sourceNotes && [...sourceNotes.querySelectorAll("[id]")]
+    .some((note) => `#${note.id}` === window.location.hash);
+  setView(requestedView || (sourceTarget ? "copy-edited" : article.dataset.defaultView), false);
 
   if (window.location.hash) {
     window.requestAnimationFrame(() => {

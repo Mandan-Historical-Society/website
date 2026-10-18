@@ -1,0 +1,18 @@
+{% set notes = citations | citationNotes(citationSources, id) %}
+{% if notes.length %}
+<section class="source-notes" role="doc-endnotes" aria-labelledby="sources-{{ id | escape }}"{% if articleVersions and editorial.status != "confirmed" %} data-article-sources{% if editorial.defaultView == "original" %} hidden{% endif %}{% endif %}>
+  {% if articleVersions %}<h3 id="sources-{{ id | escape }}">Sources</h3>{% else %}<h2 id="sources-{{ id | escape }}">Sources</h2>{% endif %}
+  <ol>
+    {% for note in notes %}
+    <li id="{{ note.anchor | escape }}" tabindex="-1">
+      {% if note.source.author %}{{ note.source.author | escape }}. {% endif %}<a href="{{ note.source.url | escape }}">{{ note.source.title | escape }}</a>.{% if note.source.date %} {{ note.source.date | escape }}.{% endif %}
+      {% if note.source.collection %}{{ note.source.collection | escape }}{% if note.source.item %}, item {{ note.source.item | escape }}{% endif %}.{% endif %} {{ note.source.repository | escape }}.
+      {% if note.locator %}<span class="source-locator">{{ note.locator | escape }}</span>{% endif %}
+      {% if note.source.documentUrl %}<a href="{{ note.source.documentUrl | escape }}">View document</a>.{% endif %}
+      Accessed <time datetime="{{ note.source.accessed | escape }}">{{ note.source.accessed | escape }}</time>.
+      {% if note.explanation %}<span class="source-explanation">{{ note.explanation | escape }}</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
