@@ -39,16 +39,23 @@ export function citationNotes(citations = [], sources = {}, articleId) {
     if (!source) {
       throw new Error(`Citation "${note.id}" references unknown source: ${note.source}`);
     }
-    for (const field of ["title", "repository", "url", "accessed"]) {
+    for (const field of ["title"]) {
       if (typeof source[field] !== "string" || !source[field].trim()) {
         throw new Error(`Source "${note.source}" needs ${field}`);
       }
     }
-    sourceUrl(source.url, `Source "${note.source}" url`);
+    if (source.repository !== undefined) {
+      if (typeof source.repository !== "string" || !source.repository.trim()) {
+        throw new Error(`Source "${note.source}" repository must be non-empty when present`);
+      }
+    }
+    if (source.url !== undefined) {
+      sourceUrl(source.url, `Source "${note.source}" url`);
+    }
     if (source.documentUrl) {
       sourceUrl(source.documentUrl, `Source "${note.source}" documentUrl`);
     }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(source.accessed)) {
+    if (source.accessed !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(source.accessed)) {
       throw new Error(`Source "${note.source}" accessed date must be a quoted YYYY-MM-DD string`);
     }
     return {

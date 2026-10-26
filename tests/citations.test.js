@@ -40,7 +40,32 @@ test("source links reject unsafe protocols and incomplete provenance", () => {
     assert.throws(() => citationNotes(citations, changed, context.id), /HTTP or HTTPS/);
   }
   const changed = { [sourceId]: { ...sources[sourceId], repository: "" } };
-  assert.throws(() => citationNotes(citations, changed, context.id), /needs repository/);
+  assert.throws(() => citationNotes(citations, changed, context.id), /repository must be non-empty/);
+});
+
+test("sources without a URL or access date still render a usable note", () => {
+  const printOnly = {
+    "morton-county-roots": {
+      title: "Morton County Roots",
+      date: "1985",
+    },
+  };
+  const notes = citationNotes(
+    [{ id: "roots", source: "morton-county-roots" }],
+    printOnly,
+    "peoples-hotel",
+  );
+  assert.equal(notes[0].source.url, undefined);
+  assert.equal(notes[0].source.repository, undefined);
+  assert.equal(notes[0].number, 1);
+  const html = environment.render("components/source-notes.njk", {
+    id: "peoples-hotel",
+    citationSources: printOnly,
+    citations: [{ id: "roots", source: "morton-county-roots" }],
+  });
+  assert.match(html, /Morton County Roots/);
+  assert.doesNotMatch(html, /<a href="undefined"/);
+  assert.doesNotMatch(html, /Accessed/);
 });
 
 test("the shared template escapes source text and shows an explanatory note", () => {

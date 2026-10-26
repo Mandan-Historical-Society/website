@@ -5,11 +5,11 @@
   <ol>
     {% for note in notes %}
     <li id="{{ note.anchor | escape }}" tabindex="-1">
-      {% if note.source.author %}{{ note.source.author | escape }}. {% endif %}<a href="{{ note.source.url | escape }}">{{ note.source.title | escape }}</a>.{% if note.source.date %} {{ note.source.date | escape }}.{% endif %}
-      {% if note.source.collection %}{{ note.source.collection | escape }}{% if note.source.item %}, item {{ note.source.item | escape }}{% endif %}.{% endif %} {{ note.source.repository | escape }}.
+      {% if note.source.author %}{{ note.source.author | escape }}. {% endif %}{% if note.source.url %}<a href="{{ note.source.url | escape }}">{{ note.source.title | escape }}</a>{% else %}{{ note.source.title | escape }}{% endif %}.{% if note.source.date %} {{ note.source.date | escape }}.{% endif %}
+      {% if note.source.collection %}{{ note.source.collection | escape }}{% if note.source.item %}, item {{ note.source.item | escape }}{% endif %}.{% endif %}{% if note.source.repository %} {{ note.source.repository | escape }}.{% endif %}
       {% if note.locator %}<span class="source-locator">{{ note.locator | escape }}</span>{% endif %}
       {% if note.source.documentUrl %}<a href="{{ note.source.documentUrl | escape }}">View document</a>.{% endif %}
-      Accessed <time datetime="{{ note.source.accessed | escape }}">{{ note.source.accessed | escape }}</time>.
+      {% if note.source.accessed %}Accessed <time datetime="{{ note.source.accessed | escape }}">{{ note.source.accessed | escape }}</time>.{% endif %}
       {% if note.explanation %}<span class="source-explanation">{{ note.explanation | escape }}</span>{% endif %}
     </li>
     {% endfor %}
